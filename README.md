@@ -2,7 +2,8 @@
 
 ## Tasks
 
-- [ ] Setup CICD with Github Actions (SCP / SSH)
+- [ ] Add sitemap.xml
+- [ ] Add 404 page
 - [ ] Add website info (mentions légales)
 - [ ] Add blog articles
 - [ ] Add JSON+LD and meta OG properties to pages
