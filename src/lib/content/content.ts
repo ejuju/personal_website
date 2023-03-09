@@ -37,7 +37,7 @@ export const content = {
 			company: 'Canal+',
 			location: 'Paris, France',
 			when: 'March 2022 - October 2022',
-			description: 'Audiovisual production agency based in Paris.',
+			description: 'Built video streaming solutions (over DASH and HLS).',
 			stack: [
 				'Golang',
 				'Docker',
