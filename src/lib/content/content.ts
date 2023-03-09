@@ -1,0 +1,137 @@
+export const content = {
+	experiences: [
+		{
+			title: 'Freelance software engineer',
+			company: '[self-employed]',
+			location: 'Paris, France',
+			when: 'June 2021 - now',
+			description: 'Fullstack web developer for SMBs.',
+			stack: ['Golang', 'TypeScript']
+		},
+		{
+			title: 'Web development fundamentals teacher',
+			company: "Code Phenix / L'Ilot",
+			location: 'Aubervilliers / Prison de Melun, France',
+			when: 'January 2022 - now',
+			description: 'Social reintegration program for (ex) prisoners.',
+			stack: ['HTML', 'CSS', 'Accessibility (a11y)', 'Technical SEO']
+		},
+		{
+			title: 'IT teacher',
+			company: 'Mission Locale Rives de Seine',
+			location: 'Rueil-Malmaison / Courbevoie, France',
+			when: 'January 2022 - now',
+			description: 'Discovery program for 16 - 25 years old.',
+			stack: ['HTML', 'CSS', 'JavaScript', 'P5.js']
+		},
+		{
+			title: 'Fullstack developer',
+			company: 'Record Eye',
+			location: 'Paris, France',
+			when: 'February 2021 - now',
+			description: 'Audiovisual production agency based in Paris.',
+			stack: ['SvelteKit', 'Nuxt', 'Typescript', 'Google Cloud Storage', 'CI/CD', 'Vercel']
+		},
+		{
+			title: 'Backend software engineer',
+			company: 'Canal+',
+			location: 'Paris, France',
+			when: 'March 2022 - October 2022',
+			description: 'Audiovisual production agency based in Paris.',
+			stack: [
+				'Golang',
+				'Docker',
+				'Kubernetes',
+				'PostgreSQL',
+				'MongoDB',
+				'Bash',
+				'CI/CD',
+				'Gitlab CI',
+				'Helm'
+			]
+		},
+		{
+			title: 'Chief Operations Officer',
+			company: 'Green Online',
+			location: 'Amsterdam, Netherlands',
+			when: 'September 2018 - May 2020',
+			description:
+				'Managed the launch and operation of our website services in 8 European countries.',
+			stack: ['Ruby', 'GCP']
+		}
+	],
+	skills: [
+		{
+			title: 'Programming languages',
+			tools: ['Golang', 'JavaScript / Typescript', 'C/C++', 'Ruby', 'Python']
+		},
+		{
+			title: 'Website development',
+			tools: [
+				'HTML and A11y',
+				'CSS',
+				'Svelte (SvelteKit)',
+				'Vue (Nuxt)',
+				'React (Next)',
+				'Technical SEO'
+			]
+		},
+		{
+			title: 'DevOps',
+			tools: [
+				'CI/CD',
+				'Bash',
+				'Gitlab CI / Github Actions',
+				'Docker / Podman',
+				'Kubernetes',
+				'Helm'
+			]
+		},
+		{
+			title: 'Database',
+			tools: ['PostgreSQL', 'MongoDB', 'Sqlite']
+		},
+		{
+			title: 'CMS',
+			tools: ['Wordpress', 'Strapi', 'Pocketbase']
+		},
+		{
+			title: 'Hosting',
+			tools: ['GCP', 'AWS', 'Vercel']
+		},
+		{
+			title: 'Storage',
+			tools: ['Google Cloud Storage', 'Scaleway']
+		},
+		{
+			title: 'OS',
+			tools: ['Linux', 'OpenBSD']
+		},
+		{
+			title: 'Creative coding',
+			tools: ['P5.js', 'Three.js', 'Sonic Pi']
+		}
+	],
+	languages: [
+		{
+			name: 'French',
+			flag: '🇫🇷',
+			level: 'Native'
+		},
+		{
+			name: 'English',
+			flag: '🇬🇧',
+			level: 'Bilingual'
+		},
+		{
+			name: 'Spanish',
+			flag: '🇪🇸',
+			level: 'Working proficiency'
+		},
+		{
+			name: 'Dutch',
+			flag: '🇳🇱',
+			level: 'Basic understanding'
+		}
+	]
+};

@@ -1,0 +1,125 @@
+:root {
+	--clr-green: #80ff80;
+	--clr-purple: #d780ff;
+	--clr-bg-1: #ffffff0d;
+	--space-page-top: 3rem;
+	--space-page-side: 1rem;
+	--space-page-bottom: 3rem;
+	--space-page: var(--space-page-top) var(--space-page-side) var(--space-page-bottom);
+}
+
+html {
+	font-family: monospace;
+	background-color: black;
+	line-height: 1.25;
+	min-height: 101vh;
+
+	/* Prevent adjustments of font size after orientation changes in iOS. */
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	background-color: #111111;
+	// color: var(--clr-green);
+	color: white;
+	margin: 0;
+}
+
+@media (min-width: 700px) {
+	body {
+		margin: 1rem auto;
+		max-width: 600px;
+	}
+}
+
+h1,
+h2,
+h3 {
+	line-height: 1.33;
+	font-weight: bold;
+}
+
+h1 {
+	font-size: 1.5rem;
+	text-transform: uppercase;
+}
+
+h2 {
+	font-size: 1.25rem;
+}
+
+h3 {
+	font-size: 1.125rem;
+}
+
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.25;
+}
+
+a {
+	color: inherit;
+	line-height: 1.33;
+}
+
+hr {
+	margin-top: 2rem;
+	color: currentColor;
+}
+
+/* Website page */
+.page {
+	padding: var(--space-page);
+}
+
+/* Page intro ("hero") section */
+.intro {
+	min-height: 60vh;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 2rem;
+
+	h1 span {
+		font-size: 4rem;
+	}
+
+	nav {
+		display: flex;
+		flex-wrap: wrap;
+		column-gap: 2rem;
+		row-gap: 1rem;
+		justify-content: center;
+	}
+}
+
+/* UI card / tile */
+.tile {
+	padding: 2rem 1rem;
+	// border: 1px solid var(--clr-green);
+	background-color: var(--clr-bg-1);
+	// border-radius: 16px;
+}
+
+/* Link to complete URL */
+.long_url {
+	line-break: anywhere;
+}
+
+/* List to display on one line */
+.inlinelist {
+	list-style: none;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+
+	li {
+		background-color: var(--clr-bg-1);
+		padding: 0.25rem 0.75rem;
+		border-left: 1px solid var(--clr-purple);
+	}
+}
