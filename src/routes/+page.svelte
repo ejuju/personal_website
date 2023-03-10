@@ -8,7 +8,7 @@
 	<section class="intro">
 		<h1>
 			<span>✌️</span><br />
-			Hi there<br />
+			Hi there
 		</h1>
 		<nav>
 			<a href="#experiences">View CV</a>
