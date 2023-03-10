@@ -1,10 +1,20 @@
 <script>
 	import { page } from '$app/stores';
+	import PageMeta from '$lib/component/PageMeta.svelte';
 </script>
 
+<PageMeta title={$page.status + ' ' + $page.error?.message} description="Oops, an error occured." />
 <main class="page">
-	<h1>{$page.status} {$page.error?.message}</h1>
-	<a href="/">Aller à la page d'accueil</a>
+	<section class="intro">
+		<h1>
+			<span>😓</span><br />
+			{$page.status}
+			{$page.error?.message}
+		</h1>
+		<nav>
+			<a href="/">Aller à la page d'accueil</a>
+		</nav>
+	</section>
 </main>
 
 <style>
