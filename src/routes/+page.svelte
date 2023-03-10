@@ -8,8 +8,9 @@
 	<section class="intro">
 		<h1>
 			<span>✌️</span><br />
-			Hi there
+			Fullstack web developer<br />
 		</h1>
+		<p>Currently available for hire.</p>
 		<nav>
 			<a href="#experiences">Work experiences</a>
 			<a href="/contact">Contact</a>
