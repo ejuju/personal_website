@@ -11,8 +11,8 @@
 			Hi there
 		</h1>
 		<nav>
-			<a href="#experiences">View CV</a>
-			<a href="#experiences">Contact</a>
+			<a href="#experiences">Work experiences</a>
+			<a href="/contact">Contact</a>
 		</nav>
 	</section>
 

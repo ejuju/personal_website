@@ -3,7 +3,9 @@
 ## Tasks
 
 - [ ] Add website info (mentions légales)
-- [ ] Add blog articles
 - [ ] Add JSON+LD and meta OG properties to pages
-- [ ] Add banner for page meta properties (OG / JSON+LD)
+- [ ] Add image banner for page meta properties (OG / JSON+LD)
+
+- [ ] Add blog articles
+
 - [ ] Make a "Download CV" button
