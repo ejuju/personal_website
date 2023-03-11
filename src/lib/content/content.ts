@@ -81,6 +81,7 @@ export const content = {
 			tools: [
 				'CI/CD',
 				'Bash',
+				'Ansible',
 				'Gitlab CI / Github Actions',
 				'Docker / Podman',
 				'Kubernetes',
