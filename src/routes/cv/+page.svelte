@@ -3,7 +3,7 @@
 	import { content } from '$lib/content/content';
 </script>
 
-<PageMeta title="Resume" description="Online CV and blog of Julien Sellier" />
+<PageMeta title="CV" description="Julien Sellier's CV" />
 <main class="page">
 	<section class="intro">
 		<h1>
@@ -15,8 +15,7 @@
 			experienced in backend and frontend web development.
 		</p>
 		<nav>
-			<a href="#experiences">Work experiences</a>
-			<a href="/contact">Contact</a>
+			<a href="/contact">Get in touch</a>
 		</nav>
 	</section>
 
