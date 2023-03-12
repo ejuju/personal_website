@@ -7,11 +7,8 @@
 	<section class="intro">
 		<h1>
 			<span>✌️</span>
-			Passionate software engineer<br />in the IT industry since 2018
+			Bonjour
 		</h1>
-		<p>
-			Experienced in backend and frontend web development.<br />
-		</p>
 		<nav>
 			<a href="/cv">Read CV</a>
 			<a href="/contact">Get in touch</a>

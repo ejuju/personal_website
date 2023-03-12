@@ -8,8 +8,12 @@
 	<section class="intro">
 		<h1>
 			<span>📜</span>
-			Curriculum Vitae
+			Curriculum vitae
 		</h1>
+		<p>
+			I'm a passionate self-taught software engineer<br />
+			experienced in backend and frontend web development.
+		</p>
 		<nav>
 			<a href="#experiences">Work experiences</a>
 			<a href="/contact">Contact</a>
