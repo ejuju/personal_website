@@ -11,12 +11,10 @@
 		</h1>
 		<p>
 			Experienced in backend and frontend web development.<br />
-			Currently available for hire.
 		</p>
 		<nav>
-			<a href="/cv">CV</a>
-			<a href="/blog">Blog</a>
-			<a href="/contact">Contact</a>
+			<a href="/cv">Read CV</a>
+			<a href="/contact">Get in touch</a>
 		</nav>
 	</section>
 </main>

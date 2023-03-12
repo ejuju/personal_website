@@ -38,7 +38,7 @@
 	</section>
 
 	<section id="skills" class="tile">
-		<h2>Skills & tools</h2>
+		<h2>Skills</h2>
 
 		{#each content.skills as skill}
 			<section>
