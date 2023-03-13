@@ -9,30 +9,6 @@ export const content = {
 			stack: ['Golang', 'TypeScript']
 		},
 		{
-			title: 'Web development fundamentals teacher',
-			company: "Code Phenix / L'Ilot",
-			location: 'Aubervilliers / Prison de Melun, France',
-			when: 'January 2022 - now',
-			description: 'Social reintegration program for (ex) prisoners.',
-			stack: ['HTML', 'CSS', 'Accessibility (a11y)', 'Technical SEO']
-		},
-		{
-			title: 'IT teacher',
-			company: 'Mission Locale Rives de Seine',
-			location: 'Rueil-Malmaison / Courbevoie, France',
-			when: 'January 2022 - now',
-			description: 'Discovery program for 16 - 25 years old.',
-			stack: ['HTML', 'CSS', 'JavaScript', 'P5.js']
-		},
-		{
-			title: 'Fullstack developer',
-			company: 'Record Eye',
-			location: 'Paris, France',
-			when: 'February 2021 - now',
-			description: 'Audiovisual production agency based in Paris.',
-			stack: ['SvelteKit', 'Nuxt', 'Typescript', 'Google Cloud Storage', 'CI/CD', 'Vercel']
-		},
-		{
 			title: 'Backend software engineer',
 			company: 'Canal+',
 			location: 'Paris, France',
@@ -51,6 +27,14 @@ export const content = {
 			]
 		},
 		{
+			title: 'Fullstack developer',
+			company: 'Record Eye',
+			location: 'Paris, France',
+			when: 'February 2021 - now',
+			description: 'Audiovisual production agency based in Paris.',
+			stack: ['SvelteKit', 'Nuxt', 'Typescript', 'Google Cloud Storage', 'CI/CD', 'Vercel']
+		},
+		{
 			title: 'Chief Operations Officer',
 			company: 'Green Online',
 			location: 'Amsterdam, Netherlands',
@@ -58,7 +42,23 @@ export const content = {
 			description:
 				'Managed the launch and operation of our website services in 8 European countries.',
 			stack: ['Ruby', 'GCP']
-		}
+		},
+		{
+			title: 'Web development fundamentals teacher',
+			company: "Code Phenix / L'Ilot",
+			location: 'Aubervilliers / Prison de Melun, France',
+			when: 'January 2022 - now',
+			description: 'Social reintegration program for (ex) prisoners.',
+			stack: ['HTML', 'CSS', 'Accessibility (a11y)', 'Technical SEO']
+		},
+		{
+			title: 'IT teacher',
+			company: 'Mission Locale Rives de Seine',
+			location: 'Rueil-Malmaison / Courbevoie, France',
+			when: 'January 2022 - now',
+			description: 'Discovery program for 16 - 25 years old.',
+			stack: ['HTML', 'CSS', 'JavaScript', 'P5.js']
+		},
 	],
 	skills: [
 		{
