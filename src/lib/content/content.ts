@@ -63,7 +63,7 @@ export const content = {
 	skills: [
 		{
 			title: 'Programming languages',
-			tools: ['Golang', 'JavaScript / Typescript', 'C/C++', 'Ruby', 'Python']
+			tools: ['Golang', 'JavaScript / Typescript']
 		},
 		{
 			title: 'Website development',
