@@ -6,7 +6,7 @@
 
 	<nav>
 		<a href="/">Home</a>
-		<a href="/blog">Blog</a>
+		<!-- <a href="/blog">Blog</a> -->
 		<a href="/contact">Contact</a>
 		<a href="/website-info">Website info</a>
 		<a target="_blank" rel="noreferrer" href="https://github.com/ejuju">GitHub profile</a>
