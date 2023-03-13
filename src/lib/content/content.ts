@@ -84,13 +84,12 @@ export const content = {
 				'Ansible',
 				'Gitlab CI / Github Actions',
 				'Docker / Podman',
-				'Kubernetes',
-				'Helm'
+				'Kubernetes'
 			]
 		},
 		{
 			title: 'Database',
-			tools: ['PostgreSQL', 'MongoDB', 'Sqlite']
+			tools: ['PostgreSQL', 'MongoDB', 'SQLite']
 		},
 		{
 			title: 'CMS',
