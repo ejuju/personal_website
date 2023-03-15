@@ -16,6 +16,7 @@
 		</p>
 		<nav>
 			<a href="/contact">Get in touch</a>
+			<a href="/cv.pdf" download="cv_julien_sellier.pdf">Download CV as PDF</a>
 		</nav>
 	</section>
 
