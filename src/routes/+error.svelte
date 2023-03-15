@@ -7,7 +7,7 @@
 <main class="page">
 	<section class="intro">
 		<h1>
-			<span>😓</span><br />
+			<span>😓</span>
 			{$page.status}
 			{$page.error?.message}
 		</h1>

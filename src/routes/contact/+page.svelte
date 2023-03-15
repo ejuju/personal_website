@@ -6,7 +6,7 @@
 <main class="page">
 	<section class="intro">
 		<h1>
-			<span>☎️</span><br />
+			<span>☎️</span>
 			Contact
 		</h1>
 		<nav>

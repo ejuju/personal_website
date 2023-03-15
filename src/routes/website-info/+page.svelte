@@ -6,7 +6,7 @@
 <main class="page">
 	<section class="intro">
 		<h1>
-			<span>ℹ️</span><br />
+			<span>ℹ️</span>
 			Website info
 		</h1>
 		<p>Coming soon...</p>
