@@ -5,7 +5,7 @@ export const content = {
 			company: '[self-employed]',
 			location: 'Paris, France',
 			when: 'June 2021 - now',
-			description: 'Fullstack web developer for SMBs.',
+			description: 'Did frontend and backend development for SMBs.',
 			stack: ['Golang', 'TypeScript']
 		},
 		{
@@ -31,7 +31,7 @@ export const content = {
 			company: 'Record Eye',
 			location: 'Paris, France',
 			when: 'February 2021 - now',
-			description: 'Audiovisual production agency based in Paris.',
+			description: 'Handled IT needs of an audiovisual production agency based in Paris.',
 			stack: ['SvelteKit', 'Nuxt', 'Typescript', 'Google Cloud Storage', 'CI/CD', 'Vercel']
 		},
 		{
@@ -48,7 +48,7 @@ export const content = {
 			company: "Code Phenix / L'Ilot",
 			location: 'Aubervilliers / Prison de Melun, France',
 			when: 'January 2022 - now',
-			description: 'Social reintegration program for (ex) prisoners.',
+			description: 'Taught coding to (ex) prisoners.',
 			stack: ['HTML', 'CSS', 'Accessibility (a11y)', 'Technical SEO']
 		},
 		{
@@ -56,7 +56,7 @@ export const content = {
 			company: 'Mission Locale Rives de Seine',
 			location: 'Rueil-Malmaison / Courbevoie, France',
 			when: 'January 2022 - now',
-			description: 'Discovery program for 16 - 25 years old.',
+			description: 'Initiated 16-25 years old to programming and computer science.',
 			stack: ['HTML', 'CSS', 'JavaScript', 'P5.js']
 		},
 	],
@@ -97,11 +97,7 @@ export const content = {
 		},
 		{
 			title: 'Hosting',
-			tools: ['GCP', 'AWS', 'Vercel']
-		},
-		{
-			title: 'Storage',
-			tools: ['Google Cloud Storage', 'Scaleway']
+			tools: ['GCP', 'AWS', 'Vercel', 'Scaleway']
 		},
 		{
 			title: 'OS',
