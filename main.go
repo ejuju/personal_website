@@ -31,7 +31,8 @@ func newHTTPHandler() http.Handler {
 	// Serve pages
 	router.Add(http.MethodGet, "/", app.ServeHomePage())
 	router.Add(http.MethodGet, "/contact", app.ServeContactPage())
-	router.Add(http.MethodGet, "/cv", app.ServeCVPage())
+	router.Add(http.MethodGet, "/resume", app.ServeResumePage())
+	router.Add(http.MethodGet, "/legal", app.ServeLegalPage())
 
 	// Serve static files
 	fsys, err := fs.Sub(staticFilesFS, "static")

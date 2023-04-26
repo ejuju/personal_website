@@ -28,4 +28,5 @@ func prerenderPage(pageName string, data map[string]any) http.HandlerFunc {
 
 func ServeHomePage() http.HandlerFunc    { return prerenderPage("home.gohtml", nil) }
 func ServeContactPage() http.HandlerFunc { return prerenderPage("contact.gohtml", nil) }
-func ServeCVPage() http.HandlerFunc      { return prerenderPage("cv.gohtml", cvPageData) }
+func ServeResumePage() http.HandlerFunc  { return prerenderPage("resume.gohtml", resumeTmplData) }
+func ServeLegalPage() http.HandlerFunc   { return prerenderPage("legal.gohtml", nil) }

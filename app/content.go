@@ -1,6 +1,6 @@
 package app
 
-var cvPageData = map[string]any{
+var resumeTmplData = map[string]any{
 	"Experiences": []struct {
 		Title          string
 		Company        string
@@ -15,7 +15,7 @@ var cvPageData = map[string]any{
 			Title:          "Web development teacher",
 			Company:        "Orange, Prison de Melun, Mission Locale, Code Phenix and L'Ilot",
 			Location:       "Paris, France",
-			From:           "2023-01-14",
+			From:           "January 2023",
 			To:             "now",
 			Description:    "Did frontend and backend development for SMBs.",
 			SkillsAndTools: []string{"HTML", "CSS", "JavaScript", "P5.js"},
@@ -24,7 +24,7 @@ var cvPageData = map[string]any{
 			Title:          "Freelance software engineer",
 			Company:        "Self-employed",
 			Location:       "Paris, France",
-			From:           "2020-06-24",
+			From:           "September 2020",
 			To:             "now",
 			Description:    "Did frontend and backend development for SMBs.",
 			SkillsAndTools: []string{"Golang", "TypeScript"},
@@ -33,8 +33,8 @@ var cvPageData = map[string]any{
 			Title:          "Backend software engineer",
 			Company:        "Canal+",
 			Location:       "Paris, France",
-			From:           "2022-03-14",
-			To:             "2022-09-21",
+			From:           "January 2022",
+			To:             "October 2022",
 			Description:    "Built video streaming solutions (over DASH and HLS).",
 			SkillsAndTools: []string{"Golang", "Docker", "Kubernetes", "PostgreSQL", "MongoDB", "Bash", "CI/CD", "Gitlab CI"},
 		},
@@ -42,8 +42,8 @@ var cvPageData = map[string]any{
 			Title:          "Chief Operations Officer",
 			Company:        "Green Online",
 			Location:       "Amsterdam, Netherlands",
-			From:           "2018-09-14",
-			To:             "2020-04-24",
+			From:           "September 2018",
+			To:             "April 2020",
 			Description:    "Managed the launch and operation of our website services in 5 European countries.",
 			SkillsAndTools: []string{"Ruby", "GCP"},
 		},
