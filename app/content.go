@@ -12,13 +12,13 @@ var resumeTmplData = map[string]any{
 		SkillsAndTools []string
 	}{
 		{
-			Title:          "Web development teacher",
+			Title:          "Web development tutor",
 			Company:        "Orange, Prison de Melun, Mission Locale, Code Phenix and L'Ilot",
 			Location:       "Paris, France",
 			From:           "January 2023",
 			To:             "now",
-			Description:    "Did frontend and backend development for SMBs.",
-			SkillsAndTools: []string{"HTML", "CSS", "JavaScript", "P5.js"},
+			Description:    "Taught web development fundamentals to (ex-) prisoners.",
+			SkillsAndTools: []string{"HTML", "CSS", "JavaScript", "HTTP"},
 		},
 		{
 			Title:          "Freelance software engineer",

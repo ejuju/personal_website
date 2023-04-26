@@ -21,7 +21,7 @@
 		<h2>Experiences</h2>
 
 		{{ range .Experiences }}
-		<section>
+		<section class="tile">
 			<h3>{{ .Title }}</h3>
 			<p class="Company"><span>🏢</span>{{ .Company }}</p>
 			<p class="Duration"><span>🗓️</span>{{ .From }} to {{ .To }}</p>
@@ -43,7 +43,7 @@
 		<h2>Main skills</h2>
 
 		{{ range .Skills }}
-		<section>
+		<section class="tile">
 			<h3>{{ .Title }}</h3>
 			<ul class="inlinelist">
 				{{ range .Tools }}
@@ -86,22 +86,6 @@
 		margin-top: 2rem;
 	}
 
-	#skills>section {
-		padding: 2rem 1rem;
-		background-color: var(--clr-bg-1);
-		border-left: 1px solid var(--clr-green);
-	}
-
-	#skills>section>ul {
-		margin-top: 1rem;
-	}
-
-	#experiences>section {
-		padding: 2rem 1rem;
-		background-color: var(--clr-bg-1);
-		border-left: 1px solid var(--clr-green);
-	}
-
 	#experiences .Company,
 	#experiences .Location,
 	#experiences .Description,
@@ -110,6 +94,10 @@
 		display: flex;
 		align-items: baseline;
 		gap: 0.75rem;
+		margin-top: 1rem;
+	}
+
+	#skills>section>ul {
 		margin-top: 1rem;
 	}
 
