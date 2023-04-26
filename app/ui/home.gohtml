@@ -1,8 +1,6 @@
-<script>
-	import PageMeta from '$lib/component/PageMeta.svelte';
-</script>
-
-<PageMeta title="Home" description="Online CV and blog of Julien Sellier" />
+{{ define "page_title" }}Home{{ end }}
+{{ define "meta_description" }}Personal website of Julien Sellier{{ end }}
+{{ define "page_main" }}
 <main class="page">
 	<section class="intro">
 		<h1>
@@ -15,6 +13,4 @@
 		</nav>
 	</section>
 </main>
-
-<style lang="scss">
-</style>
+{{ end }}

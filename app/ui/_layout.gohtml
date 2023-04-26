@@ -1,0 +1,179 @@
+{{ define "page_layout" }}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="icon" href="/16x16.png" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{{ template "page_title" }} - Julien Sellier</title>
+	<meta name="description" content='{{ block "meta_description" . }}Personal website of Julien Sellier{{ end }}'>
+	<meta name="robots" content="index, follow" />
+	<meta name="author" content="Julien Sellier" />
+</head>
+
+<body>
+	{{ template "page_header" . }}
+	{{ template "page_main" . }}
+	{{ template "page_footer" . }}
+</body>
+
+</html>
+
+<style>
+	:root {
+		--clr-green: #80ff80;
+		--clr-purple: #d780ff;
+		--clr-bg-1: #ffffff0d;
+		--space-page-top: 3rem;
+		--space-page-side: 1rem;
+		--space-page-bottom: 3rem;
+		--space-page: var(--space-page-top) var(--space-page-side) var(--space-page-bottom);
+	}
+
+	html {
+		font-family: monospace;
+		background-color: black;
+		line-height: 1.25;
+		min-height: 101vh;
+
+		/* Prevent adjustments of font size after orientation changes in iOS. */
+		-webkit-text-size-adjust: 100%;
+	}
+
+	body {
+		background-color: #111111;
+		color: white;
+		margin: 0;
+		line-height: 1;
+	}
+
+	@media (min-width: 700px) {
+		body {
+			margin: 1rem auto;
+			max-width: 600px;
+		}
+	}
+
+	h1,
+	h2,
+	h3 {
+		line-height: 1.33;
+		font-weight: bold;
+		margin: 0;
+	}
+
+	h1 {
+		font-size: 1.5rem;
+		text-transform: uppercase;
+	}
+
+	h2 {
+		font-size: 1.25rem;
+	}
+
+	h3 {
+		font-size: 1.125rem;
+	}
+
+	p {
+		line-height: 1.5;
+		margin: 0;
+	}
+
+	li {
+		line-height: 1.25;
+	}
+
+	a {
+		color: inherit;
+		line-height: 1.33;
+	}
+
+	hr {
+		margin-top: 2rem;
+		color: currentColor;
+	}
+
+	/* Website page */
+	.page {
+		padding: var(--space-page);
+	}
+
+	/* Page intro ("hero") section */
+	.intro {
+		min-height: 60vh;
+		text-align: center;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 2rem;
+	}
+
+	.intro h1 {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.intro h1 span {
+		font-size: 4rem;
+	}
+
+	.intro nav {
+		display: flex;
+		flex-wrap: wrap;
+		column-gap: 2rem;
+		row-gap: 1rem;
+		justify-content: center;
+	}
+
+	/* UI card / tile */
+	.tile {
+		padding: 2rem 1rem;
+		background-color: var(--clr-bg-1);
+	}
+
+	/* Link to complete URL */
+	.long_url {
+		line-break: anywhere;
+	}
+
+	/* List to display on one line */
+	.inlinelist {
+		list-style: none;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		list-style-position: inside;
+	}
+
+	.inlinelist li {
+		background-color: var(--clr-bg-1);
+		padding: 0.25rem 0.75rem;
+		border-left: 1px solid var(--clr-purple);
+	}
+
+	/* RESET */
+	img,
+	ul,
+	li,
+	form,
+	label,
+	menu,
+	nav,
+	output,
+	ruby,
+	section,
+	summary,
+	audio,
+	video {
+		margin: 0;
+		padding: 0;
+		border: 0;
+		font-size: 100%;
+		vertical-align: baseline;
+	}
+</style>
+{{ end }}

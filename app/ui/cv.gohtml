@@ -1,0 +1,126 @@
+{{ define "page_title" }}CV{{ end }}
+{{ define "meta_description" }}Read my curriculum vitae{{ end }}
+{{ define "page_main" }}
+<main class="page">
+	<section class="intro">
+		<h1>
+			<span>📜</span>
+			Curriculum vitae
+		</h1>
+		<p>
+			I'm a passionate self-taught software engineer<br />
+			experienced in backend and frontend web development.
+		</p>
+		<nav>
+			<a href="/contact">Get in touch</a>
+			<a href="/cv.pdf" download="cv_julien_sellier.pdf">Download CV as PDF</a>
+		</nav>
+	</section>
+
+	<section id="experiences" class="tile">
+		<h2>Experiences</h2>
+
+		{{ range .Experiences }}
+		<section>
+			<h3>{{ .Title }}</h3>
+			<p class="Company"><span>🏢</span>{{ .Company }}</p>
+			<p class="Duration"><span>🗓️</span>{{ .From }} to {{ .To }}</p>
+			<p class="Description"><span>ℹ️</span>{{ .Description }}</p>
+			<p class="Location"><span>🌍</span>{{ .Location }}</p>
+			<div class="Tools">
+				<span>⚒️</span>
+				<ul class="inlinelist">
+					{{ range .SkillsAndTools }}
+					<li>{{ . }}</li>
+					{{ end }}
+				</ul>
+			</div>
+		</section>
+		{{ end }}
+	</section>
+
+	<section id="skills" class="tile">
+		<h2>Main skills</h2>
+
+		{{ range .Skills }}
+		<section>
+			<h3>{{ .Title }}</h3>
+			<ul class="inlinelist">
+				{{ range .Tools }}
+				<li>{{ . }}</li>
+				{{ end }}
+			</ul>
+		</section>
+		{{ end }}
+	</section>
+
+	<section id="languages" class="tile">
+		<h2>Spoken languages</h2>
+
+		{{ range .Languages }}
+		<section>
+			<span>{{ .Flag }}</span>
+			<div>
+				<h3>{{ .Name }}</h3>
+				<p>{{ .Level }}</p>
+			</div>
+		</section>
+		{{ end }}
+	</section>
+</main>
+
+<style lang="scss">
+	.page .tile {
+		margin-top: 5rem;
+	}
+
+	h2 {
+		text-align: center;
+		padding-bottom: 2rem;
+		border-bottom: 1px solid #f0f0f030;
+	}
+
+	#skills>section,
+	#experiences>section,
+	#languages>section {
+		margin-top: 2rem;
+	}
+
+	#skills>section {
+		padding: 2rem 1rem;
+		background-color: var(--clr-bg-1);
+		border-left: 1px solid var(--clr-green);
+	}
+
+	#skills>section>ul {
+		margin-top: 1rem;
+	}
+
+	#experiences>section {
+		padding: 2rem 1rem;
+		background-color: var(--clr-bg-1);
+		border-left: 1px solid var(--clr-green);
+	}
+
+	#experiences .Company,
+	#experiences .Location,
+	#experiences .Description,
+	#experiences .Duration,
+	#experiences .Tools {
+		display: flex;
+		align-items: baseline;
+		gap: 0.75rem;
+		margin-top: 1rem;
+	}
+
+	#languages>section {
+		display: flex;
+		align-items: baseline;
+		gap: 1rem;
+	}
+
+	#languages>section>span {
+		font-size: 1.25rem;
+	}
+</style>
+{{ end }}
