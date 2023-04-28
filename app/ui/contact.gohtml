@@ -7,9 +7,35 @@
 			<span>☎️</span>
 			Contact
 		</h1>
-		<nav>
-			<a href="mailto:contact@juliensellier.com">contact@juliensellier.com</a>
-		</nav>
+		<a href="mailto:contact@juliensellier.com">contact@juliensellier.com</a>
 	</section>
+
+	<!-- <form action="/contact-form" method="post" class="tile">
+		<h2>Drop me a message</h2>
+		<hr>
+		<label>
+			Email address
+			<input type="email" name="email_address" placeholder="Type your email address here...">
+		</label>
+		<label>
+			Message
+			<textarea name="message" rows="10" placeholder="Type your message here..."></textarea>
+		</label>
+		<input type="submit" value="Send">
+	</form> -->
 </main>
+
+<style>
+	.page form>h2 {
+		text-align: center;
+	}
+
+	.page form {
+		margin-top: 2rem;
+	}
+
+	.page form input[type="submit"] {
+		margin-left: auto
+	}
+</style>
 {{ end }}

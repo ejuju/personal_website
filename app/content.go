@@ -21,22 +21,22 @@ var resumeTmplData = map[string]any{
 			SkillsAndTools: []string{"HTML", "CSS", "JavaScript", "HTTP"},
 		},
 		{
-			Title:          "Freelance software engineer",
-			Company:        "Self-employed",
-			Location:       "Paris, France",
-			From:           "September 2020",
-			To:             "now",
-			Description:    "Did frontend and backend development for SMBs.",
-			SkillsAndTools: []string{"Golang", "TypeScript"},
-		},
-		{
 			Title:          "Backend software engineer",
 			Company:        "Canal+",
 			Location:       "Paris, France",
 			From:           "January 2022",
 			To:             "October 2022",
 			Description:    "Built video streaming solutions (over DASH and HLS).",
-			SkillsAndTools: []string{"Golang", "Docker", "Kubernetes", "PostgreSQL", "MongoDB", "Bash", "CI/CD", "Gitlab CI"},
+			SkillsAndTools: []string{"Golang", "Docker", "Kubernetes", "PostgreSQL", "Bash", "Gitlab CI"},
+		},
+		{
+			Title:          "Freelance software engineer",
+			Company:        "Self-employed",
+			Location:       "Paris, France",
+			From:           "September 2020",
+			To:             "now",
+			Description:    "Handled frontend and backend web development for SMBs.",
+			SkillsAndTools: []string{"Golang", "TypeScript"},
 		},
 		{
 			Title:          "Chief Operations Officer",
@@ -52,77 +52,23 @@ var resumeTmplData = map[string]any{
 		Title string
 		Tools []string
 	}{
-		{
-			Title: "Programming languages",
-			Tools: []string{"Golang", "JavaScript / Typescript"},
-		},
-		{
-			Title: "Website development",
-			Tools: []string{
-				"HTML and A11y",
-				"CSS",
-				"Svelte (SvelteKit)",
-				"Vue (Nuxt)",
-				"React (Next)",
-				"Technical SEO",
-			},
-		},
-		{
-			Title: "DevOps",
-			Tools: []string{
-				"CI/CD",
-				"Bash",
-				"Ansible",
-				"Gitlab CI / Github Actions",
-				"Docker / Podman",
-				"Kubernetes",
-			},
-		},
-		{
-			Title: "Database",
-			Tools: []string{"PostgreSQL", "MongoDB", "SQLite"},
-		},
-		{
-			Title: "CMS",
-			Tools: []string{"Wordpress", "Strapi", "Pocketbase"},
-		},
-		{
-			Title: "Hosting",
-			Tools: []string{"GCP", "AWS", "Vercel", "Scaleway"},
-		},
-		{
-			Title: "OS",
-			Tools: []string{"Linux", "OpenBSD"},
-		},
-		{
-			Title: "Creative coding",
-			Tools: []string{"P5.js", "Three.js", "Sonic Pi"},
-		},
+		{Title: "Programming languages", Tools: []string{"Golang", "JavaScript / Typescript"}},
+		{Title: "Website development", Tools: []string{"HTML", "CSS", "JS / TypeScript", "Svelte / Vue / React"}},
+		{Title: "DevOps & CI/CD", Tools: []string{"Bash", "Ansible", "Gitlab CI / Github Actions", "Docker / Podman", "Kubernetes"}},
+		{Title: "Database", Tools: []string{"PostgreSQL", "MongoDB", "SQLite", "BoltDB"}},
+		{Title: "CMS", Tools: []string{"Wordpress", "Strapi", "Pocketbase"}},
+		{Title: "Hosting", Tools: []string{"GCP", "AWS", "Vercel", "Scaleway"}},
+		{Title: "OS", Tools: []string{"Linux", "OpenBSD"}},
+		{Title: "Creative coding", Tools: []string{"P5.js", "Three.js", "Sonic Pi"}},
 	},
 	"Languages": []struct {
 		Flag  string
 		Name  string
 		Level string
 	}{
-		{
-			Name:  "French",
-			Flag:  "🇫🇷",
-			Level: "Native",
-		},
-		{
-			Name:  "English",
-			Flag:  "🇬🇧",
-			Level: "Bilingual",
-		},
-		{
-			Name:  "Spanish",
-			Flag:  "🇪🇸",
-			Level: "Working proficiency",
-		},
-		{
-			Name:  "Dutch",
-			Flag:  "🇳🇱",
-			Level: "Basic understanding",
-		},
+		{Flag: "🇫🇷", Name: "French", Level: "Native"},
+		{Flag: "🇬🇧", Name: "English", Level: "Bilingual"},
+		{Flag: "🇪🇸", Name: "Spanish", Level: "Working proficiency"},
+		{Flag: "🇳🇱", Name: "Dutch", Level: "Basic understanding"},
 	},
 }

@@ -97,8 +97,53 @@
 	}
 
 	hr {
-		margin-top: 2rem;
+		width: 100%;
+		margin-top: 1rem;
 		color: currentColor;
+		border: 0;
+		background-color: var(--clr-bg-1);
+		height: 1px;
+	}
+
+	form {
+		padding: 1rem;
+		border: 1px solid grey;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	form label {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		margin-top: 1rem;
+	}
+
+	button,
+	input[type="submit"] {
+		padding: 0;
+		border: none;
+		background-color: transparent;
+		color: inherit;
+		cursor: pointer;
+		display: inline-flex;
+		width: max-content;
+		text-decoration: underline;
+	}
+
+	input[type="text"],
+	input[type="email"],
+	textarea {
+		font: inherit;
+		padding: 0.5rem;
+		color: inherit;
+		background-color: transparent;
+		border: 1px solid var(--clr-bg-1);
+	}
+
+	textarea {
+		resize: vertical;
 	}
 
 	/* Website page */
