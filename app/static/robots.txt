@@ -1,2 +1,3 @@
 User-agent: *
 Disallow: /legal
+Disallow: /contact_success
