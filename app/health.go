@@ -205,8 +205,8 @@ func newRecoveryMiddleware(config *Config, emailer Emailer) func(http.Handler) h
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			defer func() {
 				if err := recover(); err != nil {
-					err := fmt.Errorf("panic: %s\n%s\n", err, debug.Stack())
-					log.Printf(err.Error())
+					err := fmt.Errorf("panic: %s\n%s", err, debug.Stack())
+					log.Println(err.Error())
 					respondErrorPage(w, http.StatusInternalServerError, "fatal error")
 					sendEmailToAdmin(config, emailer, "Panic from juliensellier.com", err.Error())
 					return

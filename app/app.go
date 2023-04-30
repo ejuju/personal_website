@@ -21,10 +21,10 @@ func NewHTTPHandler(devMode bool) http.Handler {
 
 	// Init emailer
 	var emailer Emailer
-	switch devMode {
+	switch {
 	default:
-		emailer = newSMTPEmailer(config)
-	case true:
+		emailer = newSMTPEmailer(config) // using sendinblue for example
+	case devMode:
 		emailer = newMockEmailer(os.Stdout, nil)
 	}
 

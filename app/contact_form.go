@@ -71,8 +71,8 @@ func handleContactForm(config *Config, db DB, emailer Emailer) http.HandlerFunc 
 
 		// Send confirmation email to user
 		err = emailer(&Email{
-			Sender:        "bot@juliensellier.com",
-			Recipients:    []string{emailAddress.String()},
+			Sender:        config.SMTPSender,
+			Recipients:    []string{emailAddress.Address},
 			Subject:       "Thank you for your message!",
 			PlainTextBody: contactFormSubmission.String(),
 		})

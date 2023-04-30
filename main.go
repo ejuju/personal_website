@@ -10,7 +10,7 @@ import (
 func main() {
 	// Init and run HTTP server
 	server := &http.Server{
-		Handler:        app.NewHTTPHandler(true),
+		Handler:        app.NewHTTPHandler(false),
 		Addr:           ":8080",
 		ReadTimeout:    time.Second,
 		WriteTimeout:   time.Second,
