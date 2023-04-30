@@ -3,8 +3,7 @@
 ## Tasks
 
 UX improvements:
-- [ ] Add contact form (with email notification and confirmation)
-- [ ] Add creative coding link to footer (to instagram page)
+- [ ] HTML template for contact form submission confirmation email
 Legal:
 - [ ] Add website info (mentions légales)
 Marketing & SEO:
@@ -13,9 +12,9 @@ Marketing & SEO:
 - [ ] Add image banner for page meta properties (OG / JSON+LD)
 - [ ] Gzip middleware
 Reliability and observability:
-- [ ] Logger middleware
-- [ ] Panic recovery middleware
+- [ ] Logger & logger middleware
 - [ ] Rate limiting middleware
+- [ ] Record request and response body sizes for report
 
 ## Fun web experiments ideas
 
