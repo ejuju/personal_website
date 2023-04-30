@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"runtime/debug"
 	"strconv"
 	"time"
 )
@@ -22,14 +21,14 @@ type report struct {
 }
 
 func (r *report) String() string {
-	out := fmt.Sprintf("# Analytics report (%s to %s)\n\n", r.From.Format(time.RFC3339), r.To.Format(time.RFC3339))
+	out := fmt.Sprintf("# Health report (%s to %s)\n\n", r.From.Format(time.RFC3339), r.To.Format(time.RFC3339))
 	out += "## Traffic\n\n"
-	out += fmt.Sprintf("Number of visitors: %20s\n", strconv.Itoa(r.NumVisitors))
-	out += fmt.Sprintf("Number of requests: %20s\n", strconv.Itoa(r.NumRequests))
-	out += fmt.Sprintf("Average time to handle a request: %20s\n", r.AverageTimeToHandle)
+	out += fmt.Sprintf("%-25s %s\n", "Number of visitors:", strconv.Itoa(r.NumVisitors))
+	out += fmt.Sprintf("%-25s %s\n", "Number of requests:", strconv.Itoa(r.NumRequests))
+	out += fmt.Sprintf("%-25s %s\n", "Avg. time to handle:", r.AverageTimeToHandle)
 	out += "Most requested URLs:\n"
 	for url, numRequests := range r.MostRequestedURLs {
-		out += fmt.Sprintf("\t* %-10s requests for %s\n", strconv.Itoa(numRequests), url)
+		out += fmt.Sprintf("\t* %-10s %q\n", strconv.Itoa(numRequests), url)
 	}
 	return out
 }
@@ -115,21 +114,12 @@ func newRequestTrackingMiddleware(db DB) func(http.Handler) http.Handler {
 				TimeToHandle:  after.Sub(before),
 				UserAgent:     r.UserAgent(),
 			}
-			err = db.NewHTTPRequest(req)
+			err = db.StoreHTTPRequest(req)
 			if err != nil {
 				log.Println(err)
 				return
 			}
 		})
-	}
-}
-
-func newAnalyticsCookie(visitorID string) *http.Cookie {
-	return &http.Cookie{
-		Name:     visitorIDCookieName,
-		Value:    visitorID,
-		SameSite: http.SameSiteStrictMode,
-		HttpOnly: true,
 	}
 }
 
@@ -139,11 +129,16 @@ func createVisitorAndSetCookie(db DB, w http.ResponseWriter, r *http.Request) (*
 		FirstVisitedAt:   time.Now(),
 		FirstVisitedPage: r.URL.String(),
 	}
-	err := db.NewVisitor(visitor)
+	err := db.StoreVisitor(visitor)
 	if err != nil {
 		return nil, err
 	}
-	http.SetCookie(w, newAnalyticsCookie(visitor.ID))
+	http.SetCookie(w, &http.Cookie{
+		Name:     visitorIDCookieName,
+		Value:    visitor.ID,
+		SameSite: http.SameSiteStrictMode,
+		HttpOnly: true,
+	})
 	return visitor, nil
 }
 
@@ -197,22 +192,5 @@ func doPeriodicHealthReport(config *Config, emailer Emailer, db DB) {
 		if err != nil {
 			log.Println(err)
 		}
-	}
-}
-
-func newRecoveryMiddleware(config *Config, emailer Emailer) func(http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			defer func() {
-				if err := recover(); err != nil {
-					err := fmt.Errorf("panic: %s\n%s", err, debug.Stack())
-					log.Println(err.Error())
-					respondErrorPage(w, http.StatusInternalServerError, "fatal error")
-					sendEmailToAdmin(config, emailer, "Panic from juliensellier.com", err.Error())
-					return
-				}
-			}()
-			next.ServeHTTP(w, r)
-		})
 	}
 }

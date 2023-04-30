@@ -5,11 +5,13 @@ import (
 	"crypto/rand"
 	"embed"
 	"encoding/hex"
+	"fmt"
 	"html/template"
 	"io/fs"
 	"log"
 	"net/http"
 	"os"
+	"runtime/debug"
 	"strconv"
 
 	"github.com/bmizerany/pat"
@@ -113,4 +115,24 @@ func newID(length int) string {
 		log.Fatal(err)
 	}
 	return hex.EncodeToString(buf)
+}
+
+func newRecoveryMiddleware(config *Config, emailer Emailer) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			defer func() {
+				if err := recover(); err != nil {
+					err := fmt.Errorf("panic: %s\n%s", err, debug.Stack())
+					log.Println(err.Error())
+					respondErrorPage(w, http.StatusInternalServerError, "fatal error")
+					err = sendEmailToAdmin(config, emailer, "Panic from juliensellier.com", err.Error())
+					if err != nil {
+						log.Println(err)
+					}
+					return
+				}
+			}()
+			next.ServeHTTP(w, r)
+		})
+	}
 }

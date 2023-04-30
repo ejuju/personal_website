@@ -54,7 +54,7 @@ func handleContactForm(config *Config, db DB, emailer Emailer) http.HandlerFunc 
 		}
 
 		// Store message in DB
-		err = db.NewContactFormSubmission(contactFormSubmission)
+		err = db.StoreContactFormSubmission(contactFormSubmission)
 		if err != nil {
 			log.Println(err)
 			respondErrorPage(w, http.StatusInternalServerError, "failed to save to database")

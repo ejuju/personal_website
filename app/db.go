@@ -12,15 +12,14 @@ import (
 )
 
 type DB interface {
-	// Contact messages
-	NewContactFormSubmission(*ContactFormSubmission) error
+	StoreContactFormSubmission(*ContactFormSubmission) error
 
-	// Website analytics
-	NewHTTPRequest(*httpRequest) error
+	StoreHTTPRequest(*httpRequest) error
 	CountHTTPRequests(from, to time.Time) (int, error)
 	GetAverageTimeToHandleHTTPRequest(from, to time.Time) (time.Duration, error)
 	GetMostRequestedURLs(from, to time.Time) (map[string]int, error)
-	NewVisitor(*visitor) error
+
+	StoreVisitor(*visitor) error
 	GetVisitor(id string) (*visitor, error)
 	CountVisitors(from, to time.Time) (int, error)
 }
@@ -69,14 +68,14 @@ func newBoltDB() *boltDB {
 
 func (db *boltDB) close() error { return db.f.Close() }
 
-func (db *boltDB) NewContactFormSubmission(s *ContactFormSubmission) error {
+func (db *boltDB) StoreContactFormSubmission(s *ContactFormSubmission) error {
 	return db.f.Update(func(tx *bbolt.Tx) error {
 		key := []byte(s.CreatedAt.Format(time.RFC3339) + s.ID)
 		return tx.Bucket(boltContactFormBucket).Put(key, mustMarshalJSON(s))
 	})
 }
 
-func (db *boltDB) NewHTTPRequest(req *httpRequest) error {
+func (db *boltDB) StoreHTTPRequest(req *httpRequest) error {
 	return db.f.Update(func(tx *bbolt.Tx) error {
 		key := []byte(req.CreatedAt.Format(time.RFC3339) + req.ID)
 		return tx.Bucket(boltHTTPRequestsBucket).Put(key, mustMarshalJSON(req))
@@ -117,7 +116,7 @@ func (db *boltDB) GetMostRequestedURLs(from, to time.Time) (map[string]int, erro
 	})
 }
 
-func (db *boltDB) NewVisitor(v *visitor) error {
+func (db *boltDB) StoreVisitor(v *visitor) error {
 	return db.f.Update(func(tx *bbolt.Tx) error {
 		key := []byte(v.ID)
 		return tx.Bucket(boltVisitorBucket).Put(key, mustMarshalJSON(v))
