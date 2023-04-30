@@ -15,17 +15,39 @@ import (
 	"github.com/bmizerany/pat"
 )
 
-func NewHTTPHandler() http.Handler {
-	// Init dependencies
-	db := newInMemoryDB()
-	emailer := &mockEmailer{w: os.Stdout, err: nil}
+func NewHTTPHandler(devMode bool) http.Handler {
+	// Get config
+	config := MustLoadConfig("config.json")
+
+	// Init emailer
+	var emailer Emailer
+	switch devMode {
+	default:
+		emailer = newSMTPEmailer(config)
+	case true:
+		emailer = newMockEmailer(os.Stdout, nil)
+	}
+
+	// Init logger
+	log.SetFlags(log.LUTC | log.Llongfile)
+
+	// Init DB
+	db := newBoltDB()
+
+	// Start analytics reporting background job
+	go doPeriodicHealthReport(config, emailer, db)
+
+	// Start DB backup background job
+	go db.doPeriodicDBFileBackup(config, emailer)
+
+	// Init HTTP router
 	router := pat.New()
 
 	// Serve pages and forms
 	router.Add(http.MethodGet, "/", prerenderAndServePage("home.gohtml", nil))
 	router.Add(http.MethodGet, "/contact", prerenderAndServePage("contact.gohtml", nil))
 	router.Add(http.MethodGet, "/contact_success", prerenderAndServePage("contact_success.gohtml", nil))
-	router.Add(http.MethodPost, "/contact_form", handleContactForm(db, emailer))
+	router.Add(http.MethodPost, "/contact_form", handleContactForm(config, db, emailer))
 	router.Add(http.MethodGet, "/resume", prerenderAndServePage("resume.gohtml", resumeTmplData))
 	router.Add(http.MethodGet, "/legal", prerenderAndServePage("legal.gohtml", nil))
 
@@ -37,8 +59,8 @@ func NewHTTPHandler() http.Handler {
 	router.NotFound = http.FileServer(http.FS(fsys))
 
 	// Wrap middleware
-	out := newAnalyticsMiddleware(db)(router)
-	out = newRecoveryMiddleware()(out)
+	out := newRequestTrackingMiddleware(db)(router)
+	out = newRecoveryMiddleware(config, emailer)(out)
 
 	// Return HTTP handler
 	return out

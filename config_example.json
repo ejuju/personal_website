@@ -1,0 +1,8 @@
+{
+	"smtp_host": "smtp-relay.sendinblue.com",
+	"smtp_port": 587,
+	"smtp_username": "Jane Doe",
+	"smtp_password": "YOUR_PASSWORD_HERE",
+	"smtp_sender": "janedoe@example.com",
+	"admin_email_addr": "admin@example.com"
+}

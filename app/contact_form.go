@@ -23,7 +23,7 @@ func (s *ContactFormSubmission) String() string {
 	return out
 }
 
-func handleContactForm(db DB, emailer Emailer) http.HandlerFunc {
+func handleContactForm(config *Config, db DB, emailer Emailer) http.HandlerFunc {
 	maxMessageLength := 8000
 
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -49,7 +49,7 @@ func handleContactForm(db DB, emailer Emailer) http.HandlerFunc {
 		contactFormSubmission := &ContactFormSubmission{
 			ID:           newID(32),
 			CreatedAt:    time.Now(),
-			EmailAddress: emailAddress.String(),
+			EmailAddress: emailAddress.Address,
 			Message:      message,
 		}
 
@@ -62,12 +62,7 @@ func handleContactForm(db DB, emailer Emailer) http.HandlerFunc {
 		}
 
 		// Send notification email to admin
-		err = emailer.Send(&Email{
-			Sender:        "bot@juliensellier.com",
-			Recipient:     "admin@juliensellier.com",
-			Subject:       "New contact form submission",
-			PlainTextBody: contactFormSubmission.String(),
-		})
+		err = sendEmailToAdmin(config, emailer, "New contact form submission", contactFormSubmission.String())
 		if err != nil {
 			log.Println(err)
 			respondErrorPage(w, http.StatusInternalServerError, "failed to send notification email")
@@ -75,9 +70,9 @@ func handleContactForm(db DB, emailer Emailer) http.HandlerFunc {
 		}
 
 		// Send confirmation email to user
-		err = emailer.Send(&Email{
+		err = emailer(&Email{
 			Sender:        "bot@juliensellier.com",
-			Recipient:     contactFormSubmission.EmailAddress,
+			Recipients:    []string{emailAddress.String()},
 			Subject:       "Thank you for your message!",
 			PlainTextBody: contactFormSubmission.String(),
 		})

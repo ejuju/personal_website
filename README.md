@@ -4,6 +4,7 @@
 
 UX improvements:
 - [ ] Add contact form (with email notification and confirmation)
+- [ ] Add creative coding link to footer (to instagram page)
 Legal:
 - [ ] Add website info (mentions légales)
 Marketing & SEO:
