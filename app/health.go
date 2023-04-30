@@ -82,6 +82,8 @@ const visitorIDCookieName = "visitor_id"
 func newRequestTrackingMiddleware(db DB) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			before := time.Now()
+
 			// Get visitor from cookie,
 			// If not visitor found, create a new visitor and set cookie
 			visitor, err := getVisitorFromRequest(db, r)
@@ -99,7 +101,6 @@ func newRequestTrackingMiddleware(db DB) func(http.Handler) http.Handler {
 				}
 			}
 
-			before := time.Now()
 			next.ServeHTTP(w, r) // serve request
 			after := time.Now()
 
