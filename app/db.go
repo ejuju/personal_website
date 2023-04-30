@@ -178,7 +178,9 @@ func (db *boltDB) doPeriodicDBFileBackup(config *Config, emailer Emailer) {
 }
 
 func (db *boltDB) newBackupFname(t time.Time) string {
-	return t.Format("2006_01_02_15_04_05") + ".backup.boltdb"
+	// 2006: Year, 01: Month, 02: Day
+	// 15: Hour, 04: Minute, 05: second
+	return t.Format("20060102_150405") + "_back.boltdb"
 }
 
 func (db *boltDB) backupDB(fileName string) error {

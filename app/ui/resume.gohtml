@@ -19,7 +19,7 @@
 
 	<section id="experiences" class="tile">
 		<h2>Experiences</h2>
-
+		<hr>
 		{{ range .Experiences }}
 		<section class="tile">
 			<h3>{{ .Title }}</h3>
@@ -41,7 +41,7 @@
 
 	<section id="skills" class="tile">
 		<h2>Main skills</h2>
-
+		<hr>
 		{{ range .Skills }}
 		<section class="tile">
 			<h3>{{ .Title }}</h3>
@@ -56,7 +56,7 @@
 
 	<section id="languages" class="tile">
 		<h2>Spoken languages</h2>
-
+		<hr>
 		{{ range .Languages }}
 		<section>
 			<span>{{ .Flag }}</span>
@@ -70,18 +70,19 @@
 </main>
 
 <style lang="scss">
-	.page .tile {
-		margin-top: 5rem;
+	.page {
+		display: flex;
+		flex-direction: column;
+		gap: 4rem;
 	}
 
 	h2 {
 		text-align: center;
 		padding-bottom: 2rem;
-		border-bottom: 1px solid var(--clr-bg-1);
 	}
 
-	#skills>section,
 	#experiences>section,
+	#skills>section,
 	#languages>section {
 		margin-top: 2rem;
 	}
@@ -95,20 +96,24 @@
 		align-items: baseline;
 		gap: 0.75rem;
 		margin-top: 1rem;
+		color: var(--clr-txt-1);
+	}
+
+	/* Make emojis bigger */
+	#experiences span,
+	#languages>section>span {
+		font-size: 1.25rem;
 	}
 
 	#skills>section>ul {
 		margin-top: 1rem;
+		color: var(--clr-txt-1);
 	}
 
 	#languages>section {
 		display: flex;
 		align-items: baseline;
 		gap: 1rem;
-	}
-
-	#languages>section>span {
-		font-size: 1.25rem;
 	}
 </style>
 {{ end }}

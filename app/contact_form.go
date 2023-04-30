@@ -19,7 +19,7 @@ func (s *ContactFormSubmission) String() string {
 	out := "ID: " + s.ID + "\n"
 	out += "Created at: " + s.CreatedAt.Format(time.RFC3339) + "\n"
 	out += "Email address: " + s.EmailAddress + "\n"
-	out += "Message: " + s.Message + "\n"
+	out += "Message:\n" + s.Message + "\n"
 	return out
 }
 
@@ -71,10 +71,10 @@ func handleContactForm(config *Config, db DB, emailer Emailer) http.HandlerFunc 
 
 		// Send confirmation email to user
 		err = emailer(&Email{
-			Sender:        config.SMTPSender,
-			Recipients:    []string{emailAddress.Address},
+			From:          config.SMTPSender,
+			To:            []string{emailAddress.Address},
 			Subject:       "Thank you for your message!",
-			PlainTextBody: contactFormSubmission.String(),
+			PlainTextBody: formatContactMessageConfirmationEmail(contactFormSubmission),
 		})
 		if err != nil {
 			log.Println(err)
@@ -85,4 +85,11 @@ func handleContactForm(config *Config, db DB, emailer Emailer) http.HandlerFunc 
 		// Redirect to success page
 		http.Redirect(w, r, "/contact_success", http.StatusSeeOther)
 	}
+}
+
+func formatContactMessageConfirmationEmail(s *ContactFormSubmission) string {
+	out := s.CreatedAt.Format(time.DateTime) + "\n"
+	out += s.EmailAddress + "\n"
+	out += s.Message
+	return out
 }

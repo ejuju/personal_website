@@ -19,7 +19,7 @@ import (
 
 func NewHTTPHandler(devMode bool) http.Handler {
 	// Get config
-	config := MustLoadConfig("config.json")
+	config := mustLoadConfig("config.json")
 
 	// Init emailer
 	var emailer Emailer
@@ -51,7 +51,7 @@ func NewHTTPHandler(devMode bool) http.Handler {
 	router.Add(http.MethodGet, "/contact_success", prerenderAndServePage("contact_success.gohtml", nil))
 	router.Add(http.MethodPost, "/contact_form", handleContactForm(config, db, emailer))
 	router.Add(http.MethodGet, "/resume", prerenderAndServePage("resume.gohtml", resumeTmplData))
-	router.Add(http.MethodGet, "/legal", prerenderAndServePage("legal.gohtml", nil))
+	router.Add(http.MethodGet, "/info", prerenderAndServePage("info.gohtml", nil))
 
 	// Serve static files
 	fsys, err := fs.Sub(staticFilesFS, "static")
@@ -129,7 +129,6 @@ func newRecoveryMiddleware(config *Config, emailer Emailer) func(http.Handler) h
 					if err != nil {
 						log.Println(err)
 					}
-					return
 				}
 			}()
 			next.ServeHTTP(w, r)

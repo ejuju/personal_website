@@ -14,7 +14,7 @@ type Config struct {
 	AdminEmailAddr string `json:"admin_email_addr"`
 }
 
-func MustLoadConfig(fpath string) *Config {
+func mustLoadConfig(fpath string) *Config {
 	f, err := os.Open(fpath)
 	if err != nil {
 		panic(err)

@@ -1,0 +1,52 @@
+{{ define "page_title" }}Website info{{ end }}
+{{ define "meta_description" }}Website information{{ end }}
+{{ define "meta_robots" }}noindex, nofollow{{ end }}
+{{ define "page_main" }}
+<main class="page">
+	<section class="intro">
+		<h1>
+			<span>ℹ️</span>
+			Website info
+		</h1>
+
+		<p style="max-width: 48ch;">
+			This website is administered by Julien Sellier
+			and hosted by Ikoula.
+		</p>
+	</section>
+
+	<section class="tile">
+		<h2>Editor</h2>
+		<p>
+			Julien Sellier<br />
+		</p>
+	</section>
+
+	<section class="tile">
+		<h2>Hosting</h2>
+		<p>
+			Ikoula
+			RCS Nanterre B 417 680 618<br />
+			TVA Intracommunautaire FR37417680618<br />
+			175-177 rue d'Aguesseau, 92100 Boulogne Billancourt, France<br />
+			Téléphone : <a href="tel:+33184010250">+33 1 84 01 02 50</a><br />
+			URL du site : <a href="https://www.ikoula.com">www.ikoula.com</a><br />
+			Contact <a href="mailto:ikoula@ikoula.com">ikoula@ikoula.com</a>
+		</p>
+	</section>
+</main>
+
+<style>
+	.page {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	.page>.tile {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+</style>
+{{ end }}

@@ -3,7 +3,10 @@
 	:root {
 		--clr-green: #80ff80;
 		--clr-purple: #7c00b6;
-		--clr-bg-1: #ffffff0d;
+		--clr-bg: hsl(0, 0%, 10%);
+		--clr-bg-1: hsla(0, 0%, 90%, 0.04);
+		--clr-txt: hsl(0, 0%, 100%);
+		--clr-txt-1: hsl(0, 0%, 90%);
 		--space-page-top: 3rem;
 		--space-page-side: 1rem;
 		--space-page-bottom: 3rem;
@@ -11,7 +14,7 @@
 	}
 
 	html {
-		background-color: hsl(0, 0%, 5%);
+		background-color: var(--clr-bg);
 		line-height: 1.25;
 		min-height: 101vh;
 
@@ -20,7 +23,7 @@
 
 		font-family: monospace;
 		font-size: 100%;
-		color: white;
+		color: var(--clr-txt);
 	}
 
 	*,
@@ -43,7 +46,7 @@
 		body {
 			margin: 1rem auto;
 			max-width: 500px;
-			border: 1px solid hsl(0, 0%, 10%);
+			border: 1px solid var(--clr-bg-1);
 		}
 	}
 
@@ -86,26 +89,22 @@
 
 	hr {
 		width: 100%;
-		margin-top: 1rem;
 		color: currentColor;
 		border: 0;
-		background-color: var(--clr-bg-1);
+		background-color: #555;
 		height: 1px;
 	}
 
 	form {
-		padding: 1rem;
-		border: 1px solid grey;
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
+		gap: 2rem;
 	}
 
 	form label {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
-		margin-top: 1rem;
+		gap: 1rem;
 	}
 
 	button,
@@ -116,7 +115,7 @@
 		width: max-content;
 
 		padding: 1rem;
-		border: 1px solid white;
+		border: 1px solid currentColor;
 		text-decoration: underline;
 		text-align: center;
 	}
@@ -125,8 +124,9 @@
 	input[type="email"],
 	textarea {
 		padding: 0.5rem;
-		background-color: var(--clr-bg-1);
-		border: 1px solid var(--clr-bg-1);
+		background-color: transparent;
+		border: 1px solid grey;
+		accent-color: var(--clr-purple);
 	}
 
 	textarea {
@@ -147,6 +147,7 @@
 		justify-content: center;
 		align-items: center;
 		gap: 2rem;
+		padding: 1rem;
 	}
 
 	.intro h1 {

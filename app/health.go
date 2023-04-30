@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"strconv"
 	"time"
@@ -110,7 +111,7 @@ func newRequestTrackingMiddleware(db DB) func(http.Handler) http.Handler {
 				CreatedAt:     time.Now(),
 				VisitorID:     visitor.ID,
 				URL:           r.URL.String(),
-				IPAddress:     r.RemoteAddr,
+				IPAddress:     net.ParseIP(r.RemoteAddr).String(),
 				ContentLength: r.ContentLength,
 				TimeToHandle:  after.Sub(before),
 				UserAgent:     r.UserAgent(),
@@ -161,7 +162,7 @@ func doPeriodicHealthReport(config *Config, emailer Emailer, db DB) {
 	if err != nil {
 		log.Println(err)
 	}
-	err = sendEmailToAdmin(config, emailer, "Health report for juliensellier.com", report.String())
+	err = sendEmailToAdmin(config, emailer, "New report for juliensellier.com", report.String())
 	if err != nil {
 		log.Println(err)
 	}
@@ -189,7 +190,7 @@ func doPeriodicHealthReport(config *Config, emailer Emailer, db DB) {
 			log.Println(err)
 			continue
 		}
-		err = sendEmailToAdmin(config, emailer, "Health report for juliensellier.com", report.String())
+		err = sendEmailToAdmin(config, emailer, "New report for juliensellier.com", report.String())
 		if err != nil {
 			log.Println(err)
 		}
