@@ -3,7 +3,6 @@ package app
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"log"
 	"os"
 	"time"
@@ -18,15 +17,8 @@ type DB interface {
 	CountHTTPRequests(from, to time.Time) (int, error)
 	GetAverageTimeToHandleHTTPRequest(from, to time.Time) (time.Duration, error)
 	GetMostRequestedURLs(from, to time.Time) (map[string]int, error)
-
-	StoreVisitor(*visitor) error
-	GetVisitor(id string) (*visitor, error)
 	CountVisitors(from, to time.Time) (int, error)
 }
-
-var (
-	errVisitorNotFound = errors.New("visitor not found")
-)
 
 type boltDB struct {
 	f *bbolt.DB
@@ -35,7 +27,6 @@ type boltDB struct {
 var (
 	boltContactFormBucket  = []byte("contact_form_submissions")
 	boltHTTPRequestsBucket = []byte("http_requests")
-	boltVisitorBucket      = []byte("visitors")
 )
 
 func newBoltDB() *boltDB {
@@ -50,7 +41,6 @@ func newBoltDB() *boltDB {
 		for _, bucketID := range [][]byte{
 			boltContactFormBucket,
 			boltHTTPRequestsBucket,
-			boltVisitorBucket,
 		} {
 			_, err := tx.CreateBucketIfNotExists(bucketID)
 			if err != nil {
@@ -116,34 +106,15 @@ func (db *boltDB) GetMostRequestedURLs(from, to time.Time) (map[string]int, erro
 	})
 }
 
-func (db *boltDB) StoreVisitor(v *visitor) error {
-	return db.f.Update(func(tx *bbolt.Tx) error {
-		key := []byte(v.ID)
-		return tx.Bucket(boltVisitorBucket).Put(key, mustMarshalJSON(v))
-	})
-}
-
-func (db *boltDB) GetVisitor(id string) (*visitor, error) {
-	v := &visitor{}
-	return v, db.f.View(func(tx *bbolt.Tx) error {
-		if raw := tx.Bucket(boltVisitorBucket).Get([]byte(id)); raw != nil {
-			mustUnmarshalJSON(raw, v)
-		} else {
-			return errVisitorNotFound
-		}
-		return nil
-	})
-}
-
 func (db *boltDB) CountVisitors(from, to time.Time) (int, error) {
-	visitorIDs := map[string]struct{}{}
+	visitorHashes := map[string]struct{}{}
 	err := db.readTimeRange(boltHTTPRequestsBucket, from, to, func(k, v []byte) error {
 		req := &httpRequest{}
 		mustUnmarshalJSON(v, req)
-		visitorIDs[req.VisitorID] = struct{}{}
+		visitorHashes[req.VisitorHash] = struct{}{}
 		return nil
 	})
-	return len(visitorIDs), err
+	return len(visitorHashes), err
 }
 
 func (db *boltDB) readTimeRange(bucket []byte, from, to time.Time, cb func(k, v []byte) error) error {
@@ -167,7 +138,8 @@ func (db *boltDB) doPeriodicDBFileBackup(config *Config, emailer Emailer) {
 			log.Println(err)
 		}
 	}
-	for tick := range time.Tick(24 * time.Hour) {
+	ticker := time.NewTicker(24 * time.Hour)
+	for tick := range ticker.C {
 		if err := db.backupDB(db.newBackupFname(tick)); err != nil {
 			if err := sendEmailToAdmin(config, emailer, "DB backup failed", err.Error()); err != nil {
 				log.Println(err)

@@ -1,7 +1,8 @@
 package app
 
 import (
-	"errors"
+	"crypto/sha1"
+	"encoding/base32"
 	"fmt"
 	"log"
 	"net"
@@ -37,18 +38,12 @@ func (r *report) String() string {
 type httpRequest struct {
 	ID            string
 	CreatedAt     time.Time
-	VisitorID     string
+	VisitorHash   string
 	URL           string
 	UserAgent     string
 	IPAddress     string
 	ContentLength int64
 	TimeToHandle  time.Duration
-}
-
-type visitor struct {
-	ID               string
-	FirstVisitedAt   time.Time
-	FirstVisitedPage string
 }
 
 func generateReport(db DB, from, to time.Time) (*report, error) {
@@ -78,30 +73,10 @@ func generateReport(db DB, from, to time.Time) (*report, error) {
 	}, nil
 }
 
-const visitorIDCookieName = "visitor_id"
-
 func newRequestTrackingMiddleware(db DB) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			before := time.Now()
-
-			// Get visitor from cookie,
-			// If not visitor found, create a new visitor and set cookie
-			visitor, err := getVisitorFromRequest(db, r)
-			if err != nil && !errors.Is(err, errVisitorNotFound) {
-				log.Println(err)
-				respondErrorPage(w, http.StatusInternalServerError, "failed to store visitor")
-				return
-			}
-			if errors.Is(err, errVisitorNotFound) {
-				visitor, err = createVisitorAndSetCookie(db, w, r)
-				if err != nil {
-					log.Println(err)
-					respondErrorPage(w, http.StatusInternalServerError, "failed to store visitor")
-					return
-				}
-			}
-
 			next.ServeHTTP(w, r) // serve request
 			after := time.Now()
 
@@ -109,14 +84,14 @@ func newRequestTrackingMiddleware(db DB) func(http.Handler) http.Handler {
 			req := &httpRequest{
 				ID:            newID(32),
 				CreatedAt:     time.Now(),
-				VisitorID:     visitor.ID,
+				VisitorHash:   newVisitorHash(r),
 				URL:           r.URL.String(),
 				IPAddress:     net.ParseIP(r.RemoteAddr).String(),
 				ContentLength: r.ContentLength,
 				TimeToHandle:  after.Sub(before),
 				UserAgent:     r.UserAgent(),
 			}
-			err = db.StoreHTTPRequest(req)
+			err := db.StoreHTTPRequest(req)
 			if err != nil {
 				log.Println(err)
 				return
@@ -125,35 +100,20 @@ func newRequestTrackingMiddleware(db DB) func(http.Handler) http.Handler {
 	}
 }
 
-func createVisitorAndSetCookie(db DB, w http.ResponseWriter, r *http.Request) (*visitor, error) {
-	visitor := &visitor{
-		ID:               newID(32),
-		FirstVisitedAt:   time.Now(),
-		FirstVisitedPage: r.URL.String(),
+func newVisitorHash(r *http.Request) string {
+	// get true IP
+	ipAddr := r.Header.Get("X-Forwarded-For")
+	if ipAddr == "" {
+		ipAddr = net.ParseIP(r.RemoteAddr).String()
 	}
-	err := db.StoreVisitor(visitor)
+	// Hash IP addr and user-agent
+	hash := sha1.New()
+	_, err := hash.Write([]byte(ipAddr + r.UserAgent()))
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
-	http.SetCookie(w, &http.Cookie{
-		Name:     visitorIDCookieName,
-		Value:    visitor.ID,
-		SameSite: http.SameSiteStrictMode,
-		HttpOnly: true,
-	})
-	return visitor, nil
-}
-
-func getVisitorFromRequest(db DB, r *http.Request) (*visitor, error) {
-	// Check if tracking cookie is present
-	// Here, an error means the cookie is not present (= new visitor),
-	cookie, err := r.Cookie(visitorIDCookieName)
-	if err != nil {
-		return nil, errVisitorNotFound // no visitor found
-	}
-
-	// Get visitor from cookie
-	return db.GetVisitor(cookie.Value)
+	// Return base32 hex encoded hash
+	return base32.HexEncoding.EncodeToString(hash.Sum(nil))
 }
 
 func doPeriodicHealthReport(config *Config, emailer Emailer, db DB) {
