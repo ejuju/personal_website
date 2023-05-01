@@ -1,3 +1,5 @@
 /.tmp
 /.vscode
 /config.json
+/ssh_key
+/personal_website

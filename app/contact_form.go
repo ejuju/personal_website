@@ -88,7 +88,7 @@ func handleContactForm(config *Config, db DB, emailer Emailer) http.HandlerFunc 
 }
 
 func formatContactMessageConfirmationEmail(s *ContactFormSubmission) string {
-	out := s.CreatedAt.Format(time.DateTime) + "\n"
+	out := s.CreatedAt.Format("2006-01-02 15:04:05") + "\n"
 	out += s.EmailAddress + "\n"
 	out += s.Message
 	return out

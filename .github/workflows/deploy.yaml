@@ -5,13 +5,14 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-22.04
     name: Deploy website to production server
+    runs-on: ubuntu-latest
+    env:
+      KEY: ${{ secrets.KEY }}
+      USERNAME: ${{ secrets.USERNAME }}
+      HOST: ${{ secrets.HOST }}
     steps:
       - uses: actions/checkout@v3
+      - run: sudo apt-get install golang openssh-client
       - run: chmod +x ./cicd/deploy.sh
-      - run: |
-          KEY=${{ secrets.KEY }} \
-          USERNAME=${{ secrets.USERNAME }} \
-          HOST=${{ secrets.HOST }} \
-            ./cicd/deploy.sh
+      - run: ./cicd/deploy.sh
