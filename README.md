@@ -2,6 +2,18 @@
 
 ## Tasks
 
+CICD:
+- ❗ Build & deploy pipeline
+- [ ] E2E testing
+
+Reliability and observability:
+- ❗ Logger & logger middleware
+- ❗ Rate limiting middleware
+- [ ] Record request and response body sizes for report
+- [ ] Record response status for report
+- [ ] Show 404s in report
+- [ ] Improve health report email (HTML template)
+
 UX improvements:
 - [ ] Improve contact form submission confirmation email (HTML template)
 - [ ] Gzip middleware
@@ -15,19 +27,6 @@ Legal:
 Marketing & SEO:
 - [ ] Add JSON+LD and meta OG properties to pages
 - [ ] Add image banner for page meta properties (OG / JSON+LD)
-- [ ] Analytics like Matomo: instead of cookie, use visitor hash calculated based on user-agent, IP address and browser language.
-
-CICD:
-- ❗ Build & deploy pipeline
-- [] E2E testing
-
-Reliability and observability:
-- ❗ Logger & logger middleware
-- ❗ Rate limiting middleware
-- [] Record request and response body sizes for report
-- [] Record response status for report
-- [] Show 404s in report
-- [] Improve health report email (HTML template)
 
 ## Fun web experiments ideas
 

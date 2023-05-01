@@ -19,7 +19,11 @@ import (
 
 func NewHTTPHandler(devMode bool) http.Handler {
 	// Get config
-	config := mustLoadConfig("config.json")
+	configPath := os.Getenv("CONFIG_PATH")
+	if configPath == "" {
+		configPath = "config.json"
+	}
+	config := mustLoadConfig(configPath)
 
 	// Init emailer
 	var emailer Emailer
@@ -36,8 +40,10 @@ func NewHTTPHandler(devMode bool) http.Handler {
 	// Init DB
 	db := newBoltDB()
 
-	// Start analytics reporting background job
-	go doPeriodicHealthReport(config, emailer, db)
+	// Start analytics reporting background job (only for prod)
+	if !devMode {
+		go doPeriodicHealthReport(config, emailer, db)
+	}
 
 	// Start DB backup background job (only for prod)
 	if !devMode {

@@ -1,27 +1,17 @@
-name: Deploy
-
 on:
   push:
     branches:
-      - 'main'
+      - "main"
 
 jobs:
   deploy:
     runs-on: ubuntu-22.04
     name: Deploy website to production server
-
     steps:
       - uses: actions/checkout@v3
-      - run: sudo apt install nodejs npm
-      - run: npm i
-      - run: npm run format
-      - run: npm run check
-      - run: npm run lint
-      - run: npm run build
-      - run: echo "${{ secrets.KEY }}" > .ssh_key
-      - run: chmod 0600 .ssh_key
+      - run: chmod +x ./cicd/deploy.sh
       - run: |
-          scp -r \
-            -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
-            -i .ssh_key \
-            build/* ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/www/personal_website
+          KEY=${{ secrets.KEY }} \
+          USERNAME=${{ secrets.USERNAME }} \
+          HOST=${{ secrets.HOST }} \
+            ./cicd/deploy.sh

@@ -1,0 +1,14 @@
+[Unit]
+Description=Personal website
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+Environment=MODE="PROD"
+Environment=CONFIG_PATH="/usr/local/bin/personal_website_config.json"
+Environment=DB_DIR_PATH="/usr/local/bin/personal_website_main.boltdb"
+ExecStart=/usr/local/bin/personal_website
+
+[Install]
+WantedBy=multi-user.target

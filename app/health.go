@@ -18,7 +18,7 @@ type report struct {
 	// Website traffic
 	NumVisitors         int
 	NumRequests         int
-	MostRequestedURLs   map[string]int
+	NumRequestPerURL    map[string]int
 	AverageTimeToHandle time.Duration
 }
 
@@ -29,7 +29,7 @@ func (r *report) String() string {
 	out += fmt.Sprintf("%-25s %s\n", "Number of requests:", strconv.Itoa(r.NumRequests))
 	out += fmt.Sprintf("%-25s %s\n", "Avg. time to handle:", r.AverageTimeToHandle)
 	out += "Most requested URLs:\n"
-	for url, numRequests := range r.MostRequestedURLs {
+	for url, numRequests := range r.NumRequestPerURL {
 		out += fmt.Sprintf("\t* %-10s %q\n", strconv.Itoa(numRequests), url)
 	}
 	return out
@@ -38,8 +38,8 @@ func (r *report) String() string {
 type httpRequest struct {
 	ID            string
 	CreatedAt     time.Time
-	VisitorHash   string
 	URL           string
+	VisitorHash   string
 	UserAgent     string
 	IPAddress     string
 	ContentLength int64
@@ -59,7 +59,7 @@ func generateReport(db DB, from, to time.Time) (*report, error) {
 	if err != nil {
 		return nil, err
 	}
-	mostRequestedURLs, err := db.GetMostRequestedURLs(from, to)
+	numRequestPerURL, err := db.GetNumRequestPerURL(from, to)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func generateReport(db DB, from, to time.Time) (*report, error) {
 		NumVisitors:         numVisitors,
 		NumRequests:         numHTTPRequests,
 		AverageTimeToHandle: averageTimeToHandle,
-		MostRequestedURLs:   mostRequestedURLs,
+		NumRequestPerURL:    numRequestPerURL,
 	}, nil
 }
 

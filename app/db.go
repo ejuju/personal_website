@@ -16,12 +16,13 @@ type DB interface {
 	StoreHTTPRequest(*httpRequest) error
 	CountHTTPRequests(from, to time.Time) (int, error)
 	GetAverageTimeToHandleHTTPRequest(from, to time.Time) (time.Duration, error)
-	GetMostRequestedURLs(from, to time.Time) (map[string]int, error)
+	GetNumRequestPerURL(from, to time.Time) (map[string]int, error)
 	CountVisitors(from, to time.Time) (int, error)
 }
 
 type boltDB struct {
-	f *bbolt.DB
+	dbDirPath string // with trailing slash
+	f         *bbolt.DB
 }
 
 var (
@@ -31,7 +32,11 @@ var (
 
 func newBoltDB() *boltDB {
 	// Open file
-	db, err := bbolt.Open(".tmp/main.boltdb", 0666, &bbolt.Options{Timeout: time.Second})
+	dbDirPath := os.Getenv("DB_DIR_PATH")
+	if dbDirPath == "" {
+		dbDirPath = ".tmp/"
+	}
+	db, err := bbolt.Open(dbDirPath+"main.boltdb", 0666, &bbolt.Options{Timeout: time.Second})
 	if err != nil {
 		panic(err)
 	}
@@ -53,7 +58,7 @@ func newBoltDB() *boltDB {
 		panic(err)
 	}
 
-	return &boltDB{f: db}
+	return &boltDB{f: db, dbDirPath: dbDirPath}
 }
 
 func (db *boltDB) close() error { return db.f.Close() }
@@ -96,7 +101,7 @@ func (db *boltDB) GetAverageTimeToHandleHTTPRequest(from, to time.Time) (time.Du
 	return 0, err
 }
 
-func (db *boltDB) GetMostRequestedURLs(from, to time.Time) (map[string]int, error) {
+func (db *boltDB) GetNumRequestPerURL(from, to time.Time) (map[string]int, error) {
 	out := map[string]int{}
 	return out, db.readTimeRange(boltHTTPRequestsBucket, from, to, func(k, v []byte) error {
 		req := &httpRequest{}
@@ -156,7 +161,7 @@ func (db *boltDB) newBackupFname(t time.Time) string {
 }
 
 func (db *boltDB) backupDB(fileName string) error {
-	f, err := os.Create(".tmp/" + fileName)
+	f, err := os.Create(db.dbDirPath + fileName)
 	if err != nil {
 		return err
 	}
