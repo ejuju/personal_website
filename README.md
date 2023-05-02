@@ -32,3 +32,10 @@ Marketing & SEO:
 
 - [] Add algorithmic art (p5.js)
 - [] Morse code to/from text
+
+```bash
+KEY="$(cat ~/.ssh/github_actions_personal_website)"
+USERNAME="github"
+HOST="juliensellier.com"
+./cicd/deploy.sh
+```

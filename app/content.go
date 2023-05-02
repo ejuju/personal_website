@@ -54,12 +54,12 @@ var resumeTmplData = map[string]any{
 	}{
 		{Title: "Programming languages", Tools: []string{"Golang", "JavaScript / Typescript"}},
 		{Title: "Website development", Tools: []string{"HTML", "CSS", "JS / TypeScript", "Svelte / Vue / React"}},
-		{Title: "DevOps & CI/CD", Tools: []string{"Bash", "Ansible", "Gitlab CI / Github Actions", "Docker / Podman", "Kubernetes"}},
+		{Title: "DevOps & CI/CD", Tools: []string{"Linux", "Bash", "Ansible", "Gitlab CI / Github Actions", "Docker / Podman", "Kubernetes"}},
 		{Title: "Database", Tools: []string{"PostgreSQL", "MongoDB", "SQLite", "BoltDB"}},
-		{Title: "CMS", Tools: []string{"Wordpress", "Strapi", "Pocketbase"}},
-		{Title: "Hosting", Tools: []string{"GCP", "AWS", "Vercel", "Scaleway"}},
-		{Title: "OS", Tools: []string{"Linux", "OpenBSD"}},
 		{Title: "Creative coding", Tools: []string{"P5.js", "Three.js", "Sonic Pi"}},
+		// {Title: "CMS", Tools: []string{"Wordpress", "Strapi", "Pocketbase"}},
+		// {Title: "Hosting", Tools: []string{"GCP", "AWS", "Vercel", "Scaleway"}},
+		// {Title: "OS", Tools: []string{"Linux", "OpenBSD"}},
 	},
 	"Languages": []struct {
 		Flag  string
