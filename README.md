@@ -7,12 +7,14 @@ CICD:
 - [ ] E2E testing
 
 Reliability and observability:
-- ❗ Logger & logger middleware
 - ❗ Rate limiting middleware
 - [ ] Record request and response body sizes for report
 - [ ] Record response status for report
 - [ ] Show 404s in report
 - [ ] Improve health report email (HTML template)
+
+DX improvements:
+- Try github.com/signintech/gopdf instead of current PDF library.
 
 UX improvements:
 - [ ] Improve contact form submission confirmation email (HTML template)

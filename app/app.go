@@ -58,7 +58,8 @@ func NewHTTPHandler(devMode bool) http.Handler {
 	router.Add(http.MethodGet, "/contact", prerenderAndServePage("contact.gohtml", nil))
 	router.Add(http.MethodGet, "/contact_success", prerenderAndServePage("contact_success.gohtml", nil))
 	router.Add(http.MethodPost, "/contact_form", handleContactForm(config, db, emailer))
-	router.Add(http.MethodGet, "/resume", prerenderAndServePage("resume.gohtml", resumeTmplData))
+	router.Add(http.MethodGet, "/resume", prerenderAndServePage("resume.gohtml", resumeData))
+	router.Add(http.MethodGet, "/resume.pdf", generateAndServeResumeFile(resumeData))
 	router.Add(http.MethodGet, "/info", prerenderAndServePage("info.gohtml", nil))
 
 	// Serve static files
@@ -90,7 +91,7 @@ var layoutTmpls = []string{
 	"ui/_footer.gohtml",
 }
 
-func prerenderAndServePage(pageName string, data map[string]any) http.HandlerFunc {
+func prerenderAndServePage(pageName string, data any) http.HandlerFunc {
 	tmpl := template.Must(template.ParseFS(uiFS, append(layoutTmpls, "ui/"+pageName)...))
 	buf := &bytes.Buffer{}
 	err := tmpl.ExecuteTemplate(buf, "page_layout", data)
