@@ -73,7 +73,7 @@ func handleContactForm(config *Config, db DB, emailer Emailer) http.HandlerFunc 
 		err = emailer(&Email{
 			From:          config.SMTPSender,
 			To:            []string{emailAddress.Address},
-			Subject:       "Thank you for your message!",
+			Subject:       "Thank you for your message",
 			PlainTextBody: formatContactMessageConfirmationEmail(contactFormSubmission),
 		})
 		if err != nil {
@@ -88,8 +88,9 @@ func handleContactForm(config *Config, db DB, emailer Emailer) http.HandlerFunc 
 }
 
 func formatContactMessageConfirmationEmail(s *ContactFormSubmission) string {
-	out := s.CreatedAt.Format("2006-01-02 15:04:05") + "\n"
-	out += s.EmailAddress + "\n"
-	out += s.Message
+	out := "Hi,\nI have received your message and will reply as soon as possible.\n\n"
+	out += "Received at:\n" + s.CreatedAt.Format("2006-01-02 15:04:05") + "\n\n"
+	out += "Email address:\n" + s.EmailAddress + "\n\n"
+	out += "Message:\n" + s.Message
 	return out
 }
