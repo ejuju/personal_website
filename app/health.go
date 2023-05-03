@@ -122,7 +122,7 @@ func doPeriodicHealthReport(config *Config, emailer Emailer, db DB) {
 	if err != nil {
 		log.Println(err)
 	}
-	err = sendEmailToAdmin(config, emailer, "New report for juliensellier.com", report.String())
+	err = sendEmailToAdmin(config, emailer, "New startup report for juliensellier.com", report.String())
 	if err != nil {
 		log.Println(err)
 	}
@@ -131,17 +131,21 @@ func doPeriodicHealthReport(config *Config, emailer Emailer, db DB) {
 	for t := range time.Tick(time.Minute) {
 		// Get report "from" timestamp
 		var from time.Time
+		subjectPrefix := ""
 		switch {
 		default:
 			continue
-			// daily report every day at midnight
 		case t.Hour() == 0 && t.Minute() == 0:
+			// daily report every day at midnight
+			subjectPrefix = "Last 24 hours"
 			from = t.Add(-24 * time.Hour)
-		// weekly report every monday at 7 AM
 		case t.Hour() == 7 && t.Minute() == 0 && t.Weekday() == time.Monday:
+			// weekly report every monday at 7 AM
+			subjectPrefix = "Last week"
 			from = t.Add(-24 * time.Hour * 7)
-		// monthly report every 1st of the month at 7 AM
 		case t.Day() == 0 && t.Hour() == 7 && t.Minute() == 0:
+			// monthly report every 1st of the month at 7 AM
+			subjectPrefix = "Last month"
 			from = t.Add(-24 * time.Hour * 30)
 		}
 		// Generate and send report
@@ -150,7 +154,7 @@ func doPeriodicHealthReport(config *Config, emailer Emailer, db DB) {
 			log.Println(err)
 			continue
 		}
-		err = sendEmailToAdmin(config, emailer, "New report for juliensellier.com", report.String())
+		err = sendEmailToAdmin(config, emailer, subjectPrefix+" on juliensellier.com", report.String())
 		if err != nil {
 			log.Println(err)
 		}
