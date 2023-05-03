@@ -45,7 +45,7 @@ var resumeTmplData = map[string]any{
 			From:           "September 2018",
 			To:             "April 2020",
 			Description:    "Managed the launch and operation of our website services in 5 European countries.",
-			SkillsAndTools: []string{"Ruby", "GCP"},
+			SkillsAndTools: []string{"Ruby on Rails", "GCP"},
 		},
 	},
 	"Skills": []struct {
