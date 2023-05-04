@@ -11,6 +11,8 @@ import (
 	"github.com/go-pdf/fpdf"
 )
 
+// Resume data
+
 type resume struct {
 	TagLine          string
 	Experiences      []experience
@@ -50,7 +52,7 @@ var resumeData = resume{
 			Location:       "Paris, France",
 			From:           "January 2023",
 			To:             "now",
-			Description:    "Taught web development fundamentals to (ex-) prisoners.",
+			Description:    "Taught web development fundamentals with various social programs for (ex-) prisoners and youth at risk.",
 			SkillsAndTools: []string{"HTML", "CSS", "JavaScript", "HTTP"},
 		},
 		{
@@ -107,6 +109,8 @@ func generateAndServeResumeFile(resumeData resume) http.HandlerFunc {
 		w.Write(buf.Bytes())
 	}
 }
+
+// PDF generation
 
 const a4WidthPt, a4HeightPt = 595.28, 842.89
 
@@ -181,16 +185,16 @@ func generateResumePDF(w io.Writer, resumeData resume) error {
 	addSection(pdf, "Experiences", func() {
 		for _, exp := range resumeData.Experiences {
 			pdf.Bookmark(fmt.Sprintf("%s (%s to %s)", exp.Title, exp.From, exp.To), 2, -1)
-			pdf.Ln(2 * normalFontSize)
+			pdf.Ln(2.5 * normalFontSize)
 			pdf.SetFontStyle("B")
 			pdf.MultiCell(0, normalFontSize+4, exp.Title, "", "", false)
 			pdf.SetFontStyle("")
-			pdf.Ln(0.25 * normalFontSize)
-			addKV(pdf, 88, "From", exp.From+" to "+exp.To)
-			addKV(pdf, 88, "Company", exp.Company)
-			addKV(pdf, 88, "Location", exp.Location)
-			addKV(pdf, 88, "Technologies", strings.Join(exp.SkillsAndTools, ", "))
-			addKV(pdf, 88, "Description", exp.Description)
+			pdf.Ln(0.5 * normalFontSize)
+			addKV(pdf, 88, "From", exp.From+" to "+exp.To, textDimColor, textColor)
+			addKV(pdf, 88, "Company", exp.Company, textDimColor, textColor)
+			addKV(pdf, 88, "Location", exp.Location, textDimColor, textColor)
+			addKV(pdf, 88, "Technologies", strings.Join(exp.SkillsAndTools, ", "), textDimColor, textColor)
+			addKV(pdf, 88, "Description", exp.Description, textDimColor, textColor)
 		}
 		pdf.AddPage() // move on to page 2 for other sections
 	})
@@ -217,30 +221,31 @@ func generateResumePDF(w io.Writer, resumeData resume) error {
 		for _, lang := range resumeData.Languages {
 			pdf.Bookmark(lang.Name, 2, -1)
 			pdf.Ln(0.25 * normalFontSize)
-			pdf.SetFontStyle("B")
-			pdf.Write(normalFontSize+4, fmt.Sprintf("%-10s", lang.Name+" "))
-			pdf.SetFontStyle("")
-			pdf.SetTextColor(rgb(textDimColor))
-			pdf.CellFormat(0, normalFontSize+4, lang.Level, "", 1, "", false, 0, "")
-			pdf.SetTextColor(rgb(textColor))
+			addKV(pdf, 66, lang.Name, lang.Level, textColor, textDimColor)
+
+			// pdf.SetFontStyle("B")
+			// pdf.Write(normalFontSize+4, fmt.Sprintf("%-10s", lang.Name+" "))
+			// pdf.SetFontStyle("")
+			// pdf.SetTextColor(rgb(textDimColor))
+			// pdf.CellFormat(0, normalFontSize+4, lang.Level, "", 1, "", false, 0, "")
+			// pdf.SetTextColor(rgb(textColor))
 		}
 	})
 
 	// Add links
 	pdf.Ln(3 * normalFontSize)
 	addSection(pdf, "Links", func() {
+		pdf.Ln(0.75 * normalFontSize)
 		for text, url := range map[string]string{
 			"GitHub":           "https://github.com/ejuju",
 			"Personal website": "https://www.juliensellier.com",
 		} {
 			pdf.Bookmark(text, 2, -1)
-			pdf.Ln(1 * normalFontSize)
-			pdf.SetFontStyle("B")
-			pdf.CellFormat(0, normalFontSize+4, text, "", 1, "", false, 0, "")
+			pdf.Ln(0.25 * normalFontSize)
+			pdf.CellFormat(102, normalFontSize+4, text+" ", "", 0, "", false, 0, "")
 			pdf.SetFontStyle("U")
-			pdf.SetTextColor(rgb(textDimColor))
-			pdf.CellFormat(0, normalFontSize+4, url, "", 2, "", false, 0, url)
-			pdf.SetTextColor(rgb(textColor))
+			pdf.CellFormat(0, normalFontSize+4, url, "", 1, "", false, 0, url)
+			pdf.SetFontStyle("")
 		}
 		defer pdf.SetFontStyle("")
 	})
@@ -272,15 +277,18 @@ func rgb(clr [3]int) (r, g, b int) { return clr[0], clr[1], clr[2] }
 func addSection(pdf *fpdf.Fpdf, heading string, cb func()) {
 	pdf.Bookmark(heading, 1, -1)
 	pdf.SetFontSize(bigFontSize)
+	pdf.SetFontStyle("B")
 	pdf.MultiCell(0, bigFontSize+4, heading, "", "", false)
+	pdf.SetFontStyle("")
 	pdf.SetFontSize(normalFontSize)
 	cb()
 }
 
-func addKV(pdf *fpdf.Fpdf, keyCellWidth float64, k, v string) {
-	pdf.SetTextColor(rgb(textDimColor))
+func addKV(pdf *fpdf.Fpdf, keyCellWidth float64, k, v string, kClr, vClr [3]int) {
+	pdf.SetTextColor(rgb(kClr))
+	defer pdf.SetTextColor(rgb(textColor)) // reset
 	pdf.CellFormat(keyCellWidth, normalFontSize+4, k, "", 0, "", false, 0, "")
-	pdf.SetTextColor(rgb(textColor))
+	pdf.SetTextColor(rgb(vClr))
 	pdf.MultiCell(0, normalFontSize+4, v, "", "", false)
 }
 
