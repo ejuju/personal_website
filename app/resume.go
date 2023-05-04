@@ -111,15 +111,14 @@ func generateAndServeResumeFile(resumeData resume) http.HandlerFunc {
 const a4WidthPt, a4HeightPt = 595.28, 842.89
 
 var (
-	titleFontSize   = 24.0
-	bigFontSize     = 16.0
-	normalFontSize  = 9.5
-	marginTopSize   = 80.0
-	marginSideSize  = 50.0 // left and right margins
-	textColor       = [3]int{255, 255, 255}
-	textDimColor    = [3]int{210, 210, 210}
-	midColor        = [3]int{127, 127, 127}
-	backgroundColor = [3]int{20, 20, 20}
+	titleFontSize  = 24.0
+	bigFontSize    = 16.0
+	normalFontSize = 9.5
+	marginTopSize  = 80.0
+	marginSideSize = 50.0 // left and right margins
+	textColor      = [3]int{0, 0, 0}
+	textDimColor   = [3]int{50, 50, 50}
+	midColor       = [3]int{127, 127, 127}
 )
 
 func generateResumePDF(w io.Writer, resumeData resume) error {
@@ -135,6 +134,7 @@ func generateResumePDF(w io.Writer, resumeData resume) error {
 	pdf.SetLeftMargin(marginSideSize)
 	pdf.SetRightMargin(marginSideSize)
 	pdf.SetTextColor(rgb(textColor))
+	pdf.SetFillColor(rgb(textDimColor))
 
 	// Setup footer callback
 	pdf.AliasNbPages("{max_page}")
@@ -155,7 +155,7 @@ func generateResumePDF(w io.Writer, resumeData resume) error {
 	})
 
 	// Create page 1
-	createPage(pdf)
+	pdf.AddPage()
 
 	// Add title
 	pdf.Bookmark("Julien Sellier", 0, -1)
@@ -192,7 +192,7 @@ func generateResumePDF(w io.Writer, resumeData resume) error {
 			addKV(pdf, 88, "Technologies", strings.Join(exp.SkillsAndTools, ", "))
 			addKV(pdf, 88, "Description", exp.Description)
 		}
-		createPage(pdf) // move on to page 2 for other sections
+		pdf.AddPage() // move on to page 2 for other sections
 	})
 
 	// Add skills
@@ -265,13 +265,6 @@ func generateResumePDF(w io.Writer, resumeData resume) error {
 	})
 
 	return pdf.Output(w)
-}
-
-func createPage(pdf *fpdf.Fpdf) {
-	pdf.AddPage()
-	pdf.SetFillColor(rgb(backgroundColor))
-	pdf.Rect(0, 0, a4WidthPt+1, a4HeightPt+1, "F")
-	pdf.SetFillColor(rgb(textDimColor)) // reset fill color
 }
 
 func rgb(clr [3]int) (r, g, b int) { return clr[0], clr[1], clr[2] }
