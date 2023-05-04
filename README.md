@@ -22,6 +22,7 @@ UX improvements:
 - [ ] Style customizer (dark/light mode, accent colors, border-radius)
 - [ ] Service worker for offline access
 - [ ] Custom 404 page
+- [ ] Add french translation for website and CV
 
 Legal:
 - [ ] Complete website info page

@@ -14,11 +14,12 @@ import (
 // Resume data
 
 type resume struct {
-	TagLine          string
-	Experiences      []experience
-	Skills           []skill
-	Languages        []language
-	ContactEmailAddr string
+	TagLine       string
+	Experiences   []experience
+	Skills        []skill
+	Languages     []language
+	ExternalLinks map[string]string
+	ContactLinks  map[string]string
 }
 
 type experience struct {
@@ -62,16 +63,16 @@ var resumeData = resume{
 			From:           "January 2022",
 			To:             "October 2022",
 			Description:    "Built video streaming solutions (over DASH and HLS).",
-			SkillsAndTools: []string{"Golang", "Docker", "Kubernetes", "PostgreSQL", "Bash", "Gitlab CI"},
+			SkillsAndTools: []string{"Golang", "Docker", "Kubernetes", "PostgreSQL", "Bash", "Gitlab CI", "AWS"},
 		},
 		{
 			Title:          "Freelance software engineer",
-			Company:        "Record Eye, Cyclic Studio",
+			Company:        "Record Eye, Cyclic Studio and other SMBs",
 			Location:       "Paris, France",
 			From:           "September 2020",
 			To:             "January 2022",
-			Description:    "Handled frontend and backend web development for SMBs.",
-			SkillsAndTools: []string{"Golang", "TypeScript"},
+			Description:    "Handled frontend and backend web development projects.",
+			SkillsAndTools: []string{"Golang", "TypeScript", "Svelte / Vue / React", "HTML", "CSS", "HTTP", "GCP"},
 		},
 		{
 			Title:          "Chief Operations Officer",
@@ -96,7 +97,15 @@ var resumeData = resume{
 		{Flag: "🇪🇸", Name: "Spanish", Level: "Working proficiency"},
 		{Flag: "🇳🇱", Name: "Dutch", Level: "Basic understanding"},
 	},
-	ContactEmailAddr: "admin@juliensellier.com",
+	ExternalLinks: map[string]string{
+		"GitHub":           "https://github.com/ejuju",
+		"Personal website": "https://juliensellier.com",
+		"Algorithmic art":  "https://instagram.com/algo.croissant",
+	},
+	ContactLinks: map[string]string{
+		"Email address":       "mailto:admin@juliensellier.com",
+		"Online contact form": "https://juliensellier.com/contact#form",
+	},
 }
 
 func generateAndServeResumeFile(resumeData resume) http.HandlerFunc {
@@ -129,9 +138,9 @@ func generateResumePDF(w io.Writer, resumeData resume) error {
 	pdf := fpdf.New("P", "pt", "A4", "")
 
 	// Setup font
-	pdf.AddUTF8FontFromBytes("JetBrainsMono", "", mustReadEmbeddedFile(staticFilesFS, "static/JetBrainsMono-Regular.ttf"))
-	pdf.AddUTF8FontFromBytes("JetBrainsMono", "B", mustReadEmbeddedFile(staticFilesFS, "static/JetBrainsMono-Bold.ttf"))
-	pdf.SetFont("JetBrainsMono", "", normalFontSize)
+	pdf.AddUTF8FontFromBytes("IBMPlexSans", "", mustReadEmbeddedFile(staticFilesFS, "static/IBMPlexSans-Regular.ttf"))
+	pdf.AddUTF8FontFromBytes("IBMPlexSans", "B", mustReadEmbeddedFile(staticFilesFS, "static/IBMPlexSans-Bold.ttf"))
+	pdf.SetFont("IBMPlexSans", "", normalFontSize)
 
 	// Setup default styles
 	pdf.SetTopMargin(marginTopSize)
@@ -144,18 +153,17 @@ func generateResumePDF(w io.Writer, resumeData resume) error {
 	pdf.AliasNbPages("{max_page}")
 	pdf.SetFooterFuncLpi(func(isLastPage bool) {
 		txt := fmt.Sprintf("Page %d/{max_page}", pdf.PageCount())
-		pdf.SetTextColor(rgb(midColor))
-		defer pdf.SetTextColor(rgb(textColor))
-		pdf.Text(marginSideSize+3, a4HeightPt-4*normalFontSize, txt)
-		if !isLastPage {
-			return
-		}
-		pdf.Ln(6 * normalFontSize)
-		srcCodeURL := "https://github.com/ejuju/personal_website"
-		pdf.MultiCell(0, normalFontSize+4, "The code used to generate this PDF is available on my GitHub:", "", "", false)
-		pdf.SetFontStyle("U")
-		defer pdf.SetFontStyle("")
-		pdf.CellFormat(0, normalFontSize+4, srcCodeURL, "", 1, "", false, 0, srcCodeURL)
+		setTempTextColor(pdf, midColor, func() {
+			pdf.Text(marginSideSize+3, a4HeightPt-4*normalFontSize, txt)
+
+			if !isLastPage {
+				return
+			}
+			pdf.Ln(8 * normalFontSize)
+			srcCodeURL := "https://github.com/ejuju/personal_website"
+			pdf.Write(normalFontSize+4, "The code used to generate this PDF is available on my GitHub: ")
+			setTempFontStyle(pdf, "U", func() { addClickableURL(pdf, srcCodeURL) })
+		})
 	})
 
 	// Create page 1
@@ -163,17 +171,17 @@ func generateResumePDF(w io.Writer, resumeData resume) error {
 
 	// Add title
 	pdf.Bookmark("Julien Sellier", 0, -1)
-	pdf.SetFontSize(titleFontSize)
-	pdf.SetFontStyle("B")
-	pdf.MultiCell(0, titleFontSize, "Julien Sellier", "", "C", false)
+	setTempFontSize(pdf, titleFontSize, func() {
+		setTempFontStyle(pdf, "B", func() {
+			pdf.MultiCell(0, titleFontSize, "Julien Sellier", "", "C", false)
+		})
+	})
 
 	// Add sub-title
 	pdf.Ln(2 * normalFontSize)
-	pdf.SetFontSize(normalFontSize)
-	pdf.SetFontStyle("")
-	pdf.SetTextColor(rgb(textDimColor))
-	pdf.MultiCell(0, normalFontSize+4, resumeData.TagLine, "", "C", false)
-	pdf.SetTextColor(rgb(textColor))
+	setTempTextColor(pdf, textDimColor, func() {
+		pdf.MultiCell(0, normalFontSize+4, resumeData.TagLine, "", "C", false)
+	})
 
 	// Add horizontal line below sub-title
 	pdf.Ln(3 * normalFontSize)
@@ -186,16 +194,20 @@ func generateResumePDF(w io.Writer, resumeData resume) error {
 		for _, exp := range resumeData.Experiences {
 			pdf.Bookmark(fmt.Sprintf("%s (%s to %s)", exp.Title, exp.From, exp.To), 2, -1)
 			pdf.Ln(2.5 * normalFontSize)
-			pdf.SetFontStyle("B")
-			pdf.MultiCell(0, normalFontSize+4, exp.Title, "", "", false)
-			pdf.SetFontStyle("")
+
+			setTempFontStyle(pdf, "B", func() {
+				pdf.MultiCell(0, normalFontSize+4, exp.Title, "", "", false)
+			})
+
 			pdf.Ln(0.5 * normalFontSize)
+
 			addKV(pdf, 88, "From", exp.From+" to "+exp.To, midColor, textDimColor, "", "")
 			addKV(pdf, 88, "Company", exp.Company, midColor, textDimColor, "", "")
 			addKV(pdf, 88, "Location", exp.Location, midColor, textDimColor, "", "")
 			addKV(pdf, 88, "Technologies", strings.Join(exp.SkillsAndTools, ", "), midColor, textDimColor, "", "")
 			addKV(pdf, 88, "Description", exp.Description, midColor, textDimColor, "", "")
 		}
+
 		pdf.AddPage() // move on to page 2 for other sections
 	})
 
@@ -203,14 +215,16 @@ func generateResumePDF(w io.Writer, resumeData resume) error {
 	addSection(pdf, "Skills", func() {
 		for _, skill := range resumeData.Skills {
 			pdf.Bookmark(skill.Title, 2, -1)
-			pdf.Ln(1 * normalFontSize)
-			pdf.SetFontStyle("B")
-			pdf.MultiCell(0, normalFontSize+4, skill.Title, "", "", false)
-			pdf.SetFontStyle("")
-			pdf.Ln(0.25 * normalFontSize)
-			pdf.SetTextColor(rgb(textDimColor))
-			pdf.MultiCell(0, normalFontSize+4, strings.Join(skill.Tools, ", "), "", "", false)
-			pdf.SetTextColor(rgb(textColor))
+
+			setTempFontStyle(pdf, "B", func() {
+				pdf.Ln(1 * normalFontSize)
+				pdf.MultiCell(0, normalFontSize+4, skill.Title, "", "", false)
+			})
+
+			setTempTextColor(pdf, textDimColor, func() {
+				pdf.Ln(0.25 * normalFontSize)
+				pdf.MultiCell(0, normalFontSize+4, strings.Join(skill.Tools, ", "), "", "", false)
+			})
 		}
 	})
 
@@ -220,6 +234,7 @@ func generateResumePDF(w io.Writer, resumeData resume) error {
 		pdf.Ln(0.75 * normalFontSize)
 		for _, lang := range resumeData.Languages {
 			pdf.Bookmark(lang.Name, 2, -1)
+
 			pdf.Ln(0.25 * normalFontSize)
 			addKV(pdf, 66, lang.Name, lang.Level, textDimColor, midColor, "B", "")
 		}
@@ -228,38 +243,34 @@ func generateResumePDF(w io.Writer, resumeData resume) error {
 	// Add links
 	pdf.Ln(3 * normalFontSize)
 	addSection(pdf, "Links", func() {
-		pdf.Ln(0.75 * normalFontSize)
-		for text, url := range map[string]string{
-			"GitHub":           "https://github.com/ejuju",
-			"Personal website": "https://www.juliensellier.com",
-		} {
+		pdf.Ln(0.25 * normalFontSize)
+		for text, url := range resumeData.ExternalLinks {
 			pdf.Bookmark(text, 2, -1)
-			pdf.Ln(0.25 * normalFontSize)
-			pdf.CellFormat(102, normalFontSize+4, text+" ", "", 0, "", false, 0, "")
-			pdf.SetFontStyle("U")
-			pdf.CellFormat(0, normalFontSize+4, url, "", 1, "", false, 0, url)
-			pdf.SetFontStyle("")
+
+			pdf.Ln(0.75 * normalFontSize)
+			setTempTextColor(pdf, textDimColor, func() {
+				setTempFontStyle(pdf, "B", func() { pdf.CellFormat(106, normalFontSize+4, text+" ", "", 0, "", false, 0, "") })
+				setTempFontStyle(pdf, "U", func() { addClickableURL(pdf, url) })
+			})
 		}
-		defer pdf.SetFontStyle("")
 	})
 
 	// Add contact section
 	pdf.Ln(3 * normalFontSize)
 	addSection(pdf, "Contact", func() {
-		addLink := func(label, linkText, linkURL string) {
+		for label, url := range resumeData.ContactLinks {
 			pdf.Bookmark(label, 2, -1)
-			pdf.Ln(1 * normalFontSize)
-			pdf.SetFontStyle("B")
-			pdf.CellFormat(0, normalFontSize+4, label, "", 1, "", false, 0, "")
-			pdf.SetFontStyle("U")
-			defer pdf.SetFontStyle("")
-			pdf.SetTextColor(rgb(textDimColor))
-			defer pdf.SetTextColor(rgb(textColor))
-			pdf.CellFormat(0, normalFontSize+4, linkText, "", 2, "", false, 0, linkURL)
-		}
 
-		addLink("Email address", resumeData.ContactEmailAddr, "mailto:"+resumeData.ContactEmailAddr)
-		addLink("Online contact form", "https://www.juliensellier.com/contact", "https://www.juliensellier.com/contact")
+			pdf.Ln(1 * normalFontSize)
+			setTempFontStyle(pdf, "B", func() {
+				pdf.CellFormat(0, normalFontSize+4, label, "", 1, "", false, 0, "")
+			})
+			setTempFontStyle(pdf, "U", func() {
+				setTempTextColor(pdf, textDimColor, func() {
+					addClickableURL(pdf, url)
+				})
+			})
+		}
 	})
 
 	return pdf.Output(w)
@@ -278,16 +289,27 @@ func addSection(pdf *fpdf.Fpdf, heading string, cb func()) {
 }
 
 func addKV(pdf *fpdf.Fpdf, keyCellWidth float64, k, v string, kClr, vClr [3]int, kStyle, vStyle string) {
-	defer pdf.SetTextColor(rgb(textColor)) // reset
-	defer pdf.SetFontStyle("")             // reset
+	setTempTextColor(pdf, kClr, func() {
+		setTempFontStyle(pdf, kStyle, func() {
+			pdf.CellFormat(keyCellWidth, normalFontSize+4, k, "", 0, "", false, 0, "")
+		})
+	})
+	setTempTextColor(pdf, vClr, func() {
+		setTempFontStyle(pdf, vStyle, func() {
+			pdf.MultiCell(0, normalFontSize+4, v, "", "", false)
+		})
+	})
+}
 
-	pdf.SetTextColor(rgb(kClr))
-	pdf.SetFontStyle(kStyle)
-	pdf.CellFormat(keyCellWidth, normalFontSize+4, k, "", 0, "", false, 0, "")
-
-	pdf.SetTextColor(rgb(vClr))
-	pdf.SetFontStyle(vStyle)
-	pdf.MultiCell(0, normalFontSize+4, v, "", "", false)
+func addClickableURL(pdf *fpdf.Fpdf, url string) {
+	urlText := url
+	switch {
+	case strings.HasPrefix(url, "mailto:"):
+		urlText = strings.TrimPrefix(url, "mailto:")
+	case strings.HasPrefix(url, "https://"):
+		urlText = strings.TrimPrefix(url, "https://")
+	}
+	pdf.CellFormat(0, normalFontSize+4, urlText, "", 2, "", false, 0, url)
 }
 
 func mustReadEmbeddedFile(fs embed.FS, fname string) []byte {
@@ -296,4 +318,22 @@ func mustReadEmbeddedFile(fs embed.FS, fname string) []byte {
 		panic(err)
 	}
 	return raw
+}
+
+func setTempFontStyle(pdf *fpdf.Fpdf, style string, cb func()) {
+	pdf.SetFontStyle(style)
+	defer pdf.SetFontStyle("")
+	cb()
+}
+
+func setTempFontSize(pdf *fpdf.Fpdf, size float64, cb func()) {
+	pdf.SetFontSize(size)
+	defer pdf.SetFontSize(normalFontSize)
+	cb()
+}
+
+func setTempTextColor(pdf *fpdf.Fpdf, color [3]int, cb func()) {
+	pdf.SetTextColor(rgb(color))
+	defer pdf.SetTextColor(rgb(textColor))
+	cb()
 }
