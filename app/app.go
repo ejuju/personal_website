@@ -59,7 +59,8 @@ func NewHTTPHandler(devMode bool) http.Handler {
 	router.Add(http.MethodGet, "/contact_success", prerenderAndServePage("contact_success.gohtml", nil))
 	router.Add(http.MethodPost, "/contact_form", handleContactForm(config, db, emailer))
 	router.Add(http.MethodGet, "/resume", prerenderAndServePage("resume.gohtml", resumeData))
-	router.Add(http.MethodGet, "/resume.pdf", generateAndServeResumeFile(resumeData))
+	router.Add(http.MethodGet, "/resume.pdf", generateAndServeResumeFile(resumeData, english))
+	router.Add(http.MethodGet, "/resume_fr.pdf", generateAndServeResumeFile(resumeData, french))
 	router.Add(http.MethodGet, "/info", prerenderAndServePage("info.gohtml", nil))
 
 	// Serve static files
