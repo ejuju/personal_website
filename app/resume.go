@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/go-pdf/fpdf"
 )
@@ -23,6 +24,7 @@ type resume struct {
 	ExperienceLocationKey     map[lang]string
 	ExperienceTechnologiesKey map[lang]string
 	ExperienceDescriptionKey  map[lang]string
+	ExperienceNow             map[lang]string
 	// Skills
 	SkillsTitle map[lang]string
 	Skills      []skill
@@ -38,13 +40,14 @@ type resume struct {
 	// Source code
 	SourceCodeText map[lang]string
 	SourceCodeURL  string
+	GeneratedAt    map[lang]string
 }
 
 type experience struct {
 	Title          map[lang]string
 	Company        string
-	From           string
-	To             string
+	From           time.Time
+	To             time.Time
 	Duration       string
 	Description    map[lang]string
 	Location       string
@@ -83,6 +86,7 @@ var resumeData = resume{
 	ExperienceLocationKey:     map[lang]string{english: "Location", french: "Lieu"},
 	ExperienceTechnologiesKey: map[lang]string{english: "Technologies", french: "Technologies"},
 	ExperienceDescriptionKey:  map[lang]string{english: "Description", french: "Description"},
+	ExperienceNow:             map[lang]string{english: "now", french: "maintenant"},
 	Experiences: []experience{
 		{
 			Title: map[lang]string{
@@ -91,8 +95,8 @@ var resumeData = resume{
 			},
 			Company:  "Orange, Prison de Melun, Mission Locale, Code Phenix, L'Ilot",
 			Location: "Paris, France",
-			From:     "January 2023",
-			To:       "now",
+			From:     mustParseTime("January 2023"),
+			To:       time.Time{},
 			Description: map[lang]string{
 				english: "Taught web development fundamentals with various social programs for (ex-) prisoners and youth at risk.",
 				french:  "J'ai pu initié et formé des (ex-) détenus et des jeunes en difficulté au fondamentaux du développement web.",
@@ -106,8 +110,8 @@ var resumeData = resume{
 			},
 			Company:  "Canal+",
 			Location: "Paris, France",
-			From:     "January 2022",
-			To:       "October 2022",
+			From:     mustParseTime("January 2022"),
+			To:       mustParseTime("October 2022"),
 			Description: map[lang]string{
 				english: "Contributed to the development of a new live video streaming solution based on DASH and HLS.",
 				french:  "J'ai contribué au développement d'une nouvelle solution de live streaming de vidéo basé sur DASH et HLS.",
@@ -121,8 +125,8 @@ var resumeData = resume{
 			},
 			Company:  "Record Eye, Cyclic Studio, etc.",
 			Location: "Paris, France",
-			From:     "September 2020",
-			To:       "January 2022",
+			From:     mustParseTime("September 2020"),
+			To:       mustParseTime("January 2022"),
 			Description: map[lang]string{
 				english: "Handled frontend and backend web development projects.",
 				french:  "J'ai géré les projets de développement front et back de plusieurs PMEs",
@@ -136,8 +140,8 @@ var resumeData = resume{
 			},
 			Company:  "Green Online",
 			Location: "Amsterdam, Netherlands",
-			From:     "September 2018",
-			To:       "April 2020",
+			From:     mustParseTime("September 2018"),
+			To:       mustParseTime("April 2020"),
 			Description: map[lang]string{
 				english: "Managed the expansion and operation of our web application in 5 new European countries.",
 				french:  "Je me suis occupé de l'expansion et la gestion de notre application web dans 5 nouveaux pays européens.",
@@ -207,11 +211,12 @@ var resumeData = resume{
 		french:  "Le code utilisé pour génerer ce PDF est disponible sur mon GitHub: ",
 	},
 	SourceCodeURL: "https://github.com/ejuju/personal_website",
+	GeneratedAt:   map[lang]string{english: "PDF generated on ", french: "PDF généré le "},
 }
 
-func generateAndServeResumeFile(resumeData resume, l lang) http.HandlerFunc {
+func generateAndServeResumeFile(content resume, l lang) http.HandlerFunc {
 	buf := &bytes.Buffer{}
-	err := generateResumePDF(buf, resumeData, l)
+	err := generateResumePDF(buf, content, l)
 	if err != nil {
 		panic(err)
 	}
@@ -235,7 +240,7 @@ var (
 	midColor       = [3]int{127, 127, 127}
 )
 
-func generateResumePDF(w io.Writer, resumeData resume, l lang) error {
+func generateResumePDF(w io.Writer, content resume, l lang) error {
 	pdf := fpdf.New("P", "pt", "A4", "")
 
 	// Setup font
@@ -261,8 +266,9 @@ func generateResumePDF(w io.Writer, resumeData resume, l lang) error {
 				return
 			}
 			pdf.Ln(8 * normalFontSize)
-			pdf.Write(normalFontSize+4, resumeData.SourceCodeText[l])
-			setTempFontStyle(pdf, "U", func() { addClickableURL(pdf, resumeData.SourceCodeURL) })
+			pdf.Write(normalFontSize+4, content.SourceCodeText[l]+"\n")
+			setTempFontStyle(pdf, "U", func() { addClickableURL(pdf, content.SourceCodeURL) })
+			pdf.Write(normalFontSize+4, "\n"+content.GeneratedAt[l]+time.Now().Format("02/01/2006 (15:04:05)"))
 		})
 	})
 
@@ -280,7 +286,7 @@ func generateResumePDF(w io.Writer, resumeData resume, l lang) error {
 	// Add sub-title
 	pdf.Ln(2 * normalFontSize)
 	setTempTextColor(pdf, textDimColor, func() {
-		pdf.MultiCell(0, normalFontSize+4, resumeData.TagLine[l], "", "C", false)
+		pdf.MultiCell(0, normalFontSize+4, content.TagLine[l], "", "C", false)
 	})
 
 	// Add horizontal line below sub-title
@@ -290,9 +296,9 @@ func generateResumePDF(w io.Writer, resumeData resume, l lang) error {
 
 	// Add experiences
 	pdf.Ln(3 * normalFontSize)
-	addSection(pdf, resumeData.ExperiencesTitle[l], func() {
-		for _, exp := range resumeData.Experiences {
-			pdf.Bookmark(fmt.Sprintf("%s (%s to %s)", exp.Title[l], exp.From, exp.To), 2, -1)
+	addSection(pdf, content.ExperiencesTitle[l], func() {
+		for _, exp := range content.Experiences {
+			pdf.Bookmark(fmt.Sprintf("%s (%s)", exp.Title[l], exp.Company), 2, -1)
 			pdf.Ln(2.5 * normalFontSize)
 
 			setTempFontStyle(pdf, "B", func() {
@@ -300,23 +306,28 @@ func generateResumePDF(w io.Writer, resumeData resume, l lang) error {
 			})
 
 			pdf.Ln(0.5 * normalFontSize)
-			addKV(pdf, 88, resumeData.ExperienceDurationKey[l], exp.From+" to "+exp.To, midColor, textDimColor, "", "")
+			fromStr := exp.From.Format("01/2006")
+			toStr := content.ExperienceNow[l]
+			if !exp.To.IsZero() {
+				toStr = exp.To.Format("01/2006")
+			}
+			addKV(pdf, 88, content.ExperienceDurationKey[l], fromStr+" - "+toStr, midColor, textDimColor, "", "")
 			pdf.Ln(0.125 * normalFontSize)
-			addKV(pdf, 88, resumeData.ExperienceCompanyKey[l], exp.Company, midColor, textDimColor, "", "")
+			addKV(pdf, 88, content.ExperienceCompanyKey[l], exp.Company, midColor, textDimColor, "", "")
 			pdf.Ln(0.125 * normalFontSize)
-			addKV(pdf, 88, resumeData.ExperienceLocationKey[l], exp.Location, midColor, textDimColor, "", "")
+			addKV(pdf, 88, content.ExperienceLocationKey[l], exp.Location, midColor, textDimColor, "", "")
 			pdf.Ln(0.125 * normalFontSize)
-			addKV(pdf, 88, resumeData.ExperienceTechnologiesKey[l], strings.Join(exp.SkillsAndTools, ", "), midColor, textDimColor, "", "")
+			addKV(pdf, 88, content.ExperienceTechnologiesKey[l], strings.Join(exp.SkillsAndTools, ", "), midColor, textDimColor, "", "")
 			pdf.Ln(0.125 * normalFontSize)
-			addKV(pdf, 88, resumeData.ExperienceDescriptionKey[l], exp.Description[l], midColor, textDimColor, "", "")
+			addKV(pdf, 88, content.ExperienceDescriptionKey[l], exp.Description[l], midColor, textDimColor, "", "")
 		}
 
 		pdf.AddPage() // move on to page 2 for other sections
 	})
 
 	// Add skills
-	addSection(pdf, resumeData.SkillsTitle[l], func() {
-		for _, skill := range resumeData.Skills {
+	addSection(pdf, content.SkillsTitle[l], func() {
+		for _, skill := range content.Skills {
 			pdf.Bookmark(skill.Title, 2, -1)
 
 			setTempFontStyle(pdf, "B", func() {
@@ -333,9 +344,9 @@ func generateResumePDF(w io.Writer, resumeData resume, l lang) error {
 
 	// Add languages
 	pdf.Ln(3 * normalFontSize)
-	addSection(pdf, resumeData.LanguagesTitle[l], func() {
+	addSection(pdf, content.LanguagesTitle[l], func() {
 		pdf.Ln(0.75 * normalFontSize)
-		for _, lang := range resumeData.Languages {
+		for _, lang := range content.Languages {
 			pdf.Bookmark(lang.Name[l], 2, -1)
 
 			pdf.Ln(0.25 * normalFontSize)
@@ -345,9 +356,9 @@ func generateResumePDF(w io.Writer, resumeData resume, l lang) error {
 
 	// Add links
 	pdf.Ln(3 * normalFontSize)
-	addSection(pdf, resumeData.ExternalLinksTitle[l], func() {
+	addSection(pdf, content.ExternalLinksTitle[l], func() {
 		pdf.Ln(0.25 * normalFontSize)
-		for _, link := range resumeData.ExternalLinks {
+		for _, link := range content.ExternalLinks {
 			pdf.Bookmark(link.Label[l], 2, -1)
 
 			pdf.Ln(0.75 * normalFontSize)
@@ -360,8 +371,8 @@ func generateResumePDF(w io.Writer, resumeData resume, l lang) error {
 
 	// Add contact section
 	pdf.Ln(3 * normalFontSize)
-	addSection(pdf, resumeData.ContactLinksTitle[l], func() {
-		for _, link := range resumeData.ContactLinks {
+	addSection(pdf, content.ContactLinksTitle[l], func() {
+		for _, link := range content.ContactLinks {
 			pdf.Bookmark(link.Label[l], 2, -1)
 
 			pdf.Ln(1 * normalFontSize)
@@ -421,6 +432,14 @@ func mustReadEmbeddedFile(fs embed.FS, fname string) []byte {
 		panic(err)
 	}
 	return raw
+}
+
+func mustParseTime(s string) time.Time {
+	t, err := time.Parse("January 2006", s)
+	if err != nil {
+		panic(err)
+	}
+	return t
 }
 
 func setTempFontStyle(pdf *fpdf.Fpdf, style string, cb func()) {

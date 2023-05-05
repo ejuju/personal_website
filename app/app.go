@@ -54,14 +54,15 @@ func NewHTTPHandler(devMode bool) http.Handler {
 	router := pat.New()
 
 	// Serve pages and forms
-	router.Add(http.MethodGet, "/", prerenderAndServePage("home.gohtml", nil))
-	router.Add(http.MethodGet, "/contact", prerenderAndServePage("contact.gohtml", nil))
-	router.Add(http.MethodGet, "/contact_success", prerenderAndServePage("contact_success.gohtml", nil))
+	router.Add(http.MethodGet, "/", prerenderAndServePage("home.gohtml", english, nil))
+	router.Add(http.MethodGet, "/contact", prerenderAndServePage("contact.gohtml", english, nil))
+	router.Add(http.MethodGet, "/contact_success", prerenderAndServePage("contact_success.gohtml", english, nil))
 	router.Add(http.MethodPost, "/contact_form", handleContactForm(config, db, emailer))
-	router.Add(http.MethodGet, "/resume", prerenderAndServePage("resume.gohtml", resumeData))
+	router.Add(http.MethodGet, "/resume", prerenderAndServePage("resume.gohtml", english, resumeData))
+	router.Add(http.MethodGet, "/resume/fr", prerenderAndServePage("resume.gohtml", french, resumeData))
 	router.Add(http.MethodGet, "/resume.pdf", generateAndServeResumeFile(resumeData, english))
 	router.Add(http.MethodGet, "/resume_fr.pdf", generateAndServeResumeFile(resumeData, french))
-	router.Add(http.MethodGet, "/info", prerenderAndServePage("info.gohtml", nil))
+	router.Add(http.MethodGet, "/info", prerenderAndServePage("info.gohtml", english, nil))
 
 	// Serve static files
 	fsys, err := fs.Sub(staticFilesFS, "static")
@@ -92,10 +93,13 @@ var layoutTmpls = []string{
 	"ui/_footer.gohtml",
 }
 
-func prerenderAndServePage(pageName string, data any) http.HandlerFunc {
+func prerenderAndServePage(pageName string, l lang, data any) http.HandlerFunc {
 	tmpl := template.Must(template.ParseFS(uiFS, append(layoutTmpls, "ui/"+pageName)...))
 	buf := &bytes.Buffer{}
-	err := tmpl.ExecuteTemplate(buf, "page_layout", data)
+	err := tmpl.ExecuteTemplate(buf, "page_layout", map[string]any{
+		"Lang": l,
+		"Data": data,
+	})
 	if err != nil {
 		panic(err)
 	}

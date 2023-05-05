@@ -8,7 +8,7 @@
 			Résumé
 		</h1>
 		<p>
-			{{ .TagLine }}
+			{{ index .Data.TagLine .Lang }}
 		</p>
 		<nav>
 			<a href="/contact">Get in touch</a>
@@ -17,15 +17,19 @@
 	</section>
 
 	<section id="experiences" class="tile">
-		<h2>Experiences</h2>
+		<h2>{{ index .Data.ExperiencesTitle .Lang }}</h2>
 		<hr>
-		{{ range .Experiences }}
+		{{ range .Data.Experiences }}
 		<section class="tile">
-			<h3>{{ .Title }}</h3>
+			<h3>{{ index .Title $.Lang }}</h3>
 			<p class="Company"><span>🏢</span>{{ .Company }}</p>
-			<p class="Duration"><span>🗓️</span>{{ .From }} to {{ .To }}</p>
-			<p class="Description"><span>ℹ️</span>{{ .Description }}</p>
-			<p class="Location"><span>🌍</span>{{ .Location }}</p>
+			<p class="Duration">
+				<span>🗓️</span>
+				{{ .From.Format "01/2006" }} -
+				{{ if .To.IsZero }}{{ index $.Data.ExperienceNow $.Lang }}
+				{{ else }}{{ .To.Format "01/2006" }}
+				{{ end }}
+			</p>
 			<div class="Tools">
 				<span>⚒️</span>
 				<ul class="inlinelist">
@@ -34,14 +38,16 @@
 					{{ end }}
 				</ul>
 			</div>
+			<p class="Location"><span>🌍</span>{{ .Location }}</p>
+			<p class="Description"><span>ℹ️</span>{{ index .Description $.Lang }}</p>
 		</section>
 		{{ end }}
 	</section>
 
 	<section id="skills" class="tile">
-		<h2>Main skills</h2>
+		<h2>{{ index .Data.SkillsTitle .Lang }}</h2>
 		<hr>
-		{{ range .Skills }}
+		{{ range .Data.Skills }}
 		<section class="tile">
 			<h3>{{ .Title }}</h3>
 			<ul class="inlinelist">
@@ -54,14 +60,14 @@
 	</section>
 
 	<section id="languages" class="tile">
-		<h2>Spoken languages</h2>
+		<h2>{{ index .Data.LanguagesTitle .Lang }}</h2>
 		<hr>
-		{{ range .Languages }}
+		{{ range .Data.Languages }}
 		<section>
 			<span>{{ .Flag }}</span>
 			<div>
-				<h3>{{ .Name }}</h3>
-				<p>{{ .Level }}</p>
+				<h3>{{ index .Name $.Lang }}</h3>
+				<p>{{ index .Level $.Lang }}</p>
 			</div>
 		</section>
 		{{ end }}
