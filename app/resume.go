@@ -25,6 +25,7 @@ type resume struct {
 	ExperienceTechnologiesKey map[lang]string
 	ExperienceDescriptionKey  map[lang]string
 	ExperienceNow             map[lang]string
+	ExperienceMonths          map[lang]string
 	// Skills
 	SkillsTitle map[lang]string
 	Skills      []skill
@@ -54,6 +55,9 @@ type experience struct {
 	SkillsAndTools []string
 }
 
+// Returns the number of months from the start to the end of the work experience.
+func (exp *experience) Months() int { return int(exp.To.Sub(exp.From).Hours() / (24 * 30)) }
+
 type skill struct {
 	Title string
 	Tools []string
@@ -80,13 +84,14 @@ var resumeData = resume{
 		english: "Passionate self-taught software engineer,\nspecialised in backend and frontend web development.",
 		french:  "Développeur auto-ditacte passionné,\nspecialisé en développement web (backend et frontend).",
 	},
-	ExperiencesTitle:          map[lang]string{english: "Experiences", french: "Expériences"},
+	ExperiencesTitle:          map[lang]string{english: "Work experience", french: "Expériences"},
 	ExperienceDurationKey:     map[lang]string{english: "Duration", french: "Durée"},
 	ExperienceCompanyKey:      map[lang]string{english: "Organisation", french: "Organisation"},
 	ExperienceLocationKey:     map[lang]string{english: "Location", french: "Lieu"},
 	ExperienceTechnologiesKey: map[lang]string{english: "Technologies", french: "Technologies"},
 	ExperienceDescriptionKey:  map[lang]string{english: "Description", french: "Description"},
 	ExperienceNow:             map[lang]string{english: "now", french: "maintenant"},
+	ExperienceMonths:          map[lang]string{english: "months", french: "mois"},
 	Experiences: []experience{
 		{
 			Title: map[lang]string{
@@ -207,8 +212,8 @@ var resumeData = resume{
 		},
 	},
 	SourceCodeText: map[lang]string{
-		english: "The code used to generate this PDF is available on my GitHub: ",
-		french:  "Le code utilisé pour génerer ce PDF est disponible sur mon GitHub: ",
+		english: "The code I wrote handle my website and to generate this resume as a PDF is available on my GitHub: ",
+		french:  "Le code que j'utilise sur mon site web et pour génerer ce PDF est disponible sur mon GitHub: ",
 	},
 	SourceCodeURL: "https://github.com/ejuju/personal_website",
 	GeneratedAt:   map[lang]string{english: "PDF generated on ", french: "PDF généré le "},
@@ -244,9 +249,10 @@ func generateResumePDF(w io.Writer, content resume, l lang) error {
 	pdf := fpdf.New("P", "pt", "A4", "")
 
 	// Setup font
-	pdf.AddUTF8FontFromBytes("IBMPlexSans", "", mustReadEmbeddedFile(staticFilesFS, "static/IBMPlexSans-Regular.ttf"))
-	pdf.AddUTF8FontFromBytes("IBMPlexSans", "B", mustReadEmbeddedFile(staticFilesFS, "static/IBMPlexSans-Bold.ttf"))
-	pdf.SetFont("IBMPlexSans", "", normalFontSize)
+	font := "Roboto"
+	pdf.AddUTF8FontFromBytes(font, "", mustReadEmbeddedFile(staticFilesFS, "static/"+font+"-Regular.ttf"))
+	pdf.AddUTF8FontFromBytes(font, "B", mustReadEmbeddedFile(staticFilesFS, "static/"+font+"-Bold.ttf"))
+	pdf.SetFont(font, "", normalFontSize)
 
 	// Setup default styles
 	pdf.SetTopMargin(marginTopSize)
@@ -276,10 +282,10 @@ func generateResumePDF(w io.Writer, content resume, l lang) error {
 	pdf.AddPage()
 
 	// Add title
-	pdf.Bookmark("Julien Sellier", 0, -1)
+	pdf.Bookmark(defaultBranding.Name, 0, -1)
 	setTempFontSize(pdf, titleFontSize, func() {
 		setTempFontStyle(pdf, "B", func() {
-			pdf.MultiCell(0, titleFontSize, "Julien Sellier", "", "C", false)
+			pdf.MultiCell(0, titleFontSize, defaultBranding.Name, "", "C", false)
 		})
 	})
 
@@ -310,6 +316,10 @@ func generateResumePDF(w io.Writer, content resume, l lang) error {
 			toStr := content.ExperienceNow[l]
 			if !exp.To.IsZero() {
 				toStr = exp.To.Format("01/2006")
+			}
+			dur := fromStr + " - " + toStr
+			if !exp.To.IsZero() {
+				dur += fmt.Sprintf(" (%d %s)", exp.Months(), content.ExperienceMonths[l])
 			}
 			addKV(pdf, 88, content.ExperienceDurationKey[l], fromStr+" - "+toStr, midColor, textDimColor, "", "")
 			pdf.Ln(0.125 * normalFontSize)

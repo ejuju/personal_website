@@ -27,7 +27,7 @@
 				<span>🗓️</span>
 				{{ .From.Format "01/2006" }} -
 				{{ if .To.IsZero }}{{ index $.Data.ExperienceNow $.Lang }}
-				{{ else }}{{ .To.Format "01/2006" }}
+				{{ else }}{{ .To.Format "01/2006" }} ({{ .Months }} {{ index $.Data.ExperienceMonths $.Lang }})
 				{{ end }}
 			</p>
 			<div class="Tools">

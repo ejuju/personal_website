@@ -55,6 +55,7 @@ func NewHTTPHandler(devMode bool) http.Handler {
 
 	// Serve pages and forms
 	router.Add(http.MethodGet, "/", prerenderAndServePage("home.gohtml", english, nil))
+	router.Add(http.MethodGet, "/info", prerenderAndServePage("info.gohtml", english, nil))
 	router.Add(http.MethodGet, "/contact", prerenderAndServePage("contact.gohtml", english, nil))
 	router.Add(http.MethodGet, "/contact_success", prerenderAndServePage("contact_success.gohtml", english, nil))
 	router.Add(http.MethodPost, "/contact_form", handleContactForm(config, db, emailer))
@@ -62,7 +63,6 @@ func NewHTTPHandler(devMode bool) http.Handler {
 	router.Add(http.MethodGet, "/resume/fr", prerenderAndServePage("resume.gohtml", french, resumeData))
 	router.Add(http.MethodGet, "/resume.pdf", generateAndServeResumeFile(resumeData, english))
 	router.Add(http.MethodGet, "/resume_fr.pdf", generateAndServeResumeFile(resumeData, french))
-	router.Add(http.MethodGet, "/info", prerenderAndServePage("info.gohtml", english, nil))
 
 	// Serve static files
 	fsys, err := fs.Sub(staticFilesFS, "static")
@@ -97,13 +97,16 @@ func prerenderAndServePage(pageName string, l lang, data any) http.HandlerFunc {
 	tmpl := template.Must(template.ParseFS(uiFS, append(layoutTmpls, "ui/"+pageName)...))
 	buf := &bytes.Buffer{}
 	err := tmpl.ExecuteTemplate(buf, "page_layout", map[string]any{
-		"Lang": l,
-		"Data": data,
+		"Lang":     l,
+		"Branding": defaultBranding,
+		"Data":     data,
 	})
 	if err != nil {
 		panic(err)
 	}
-	return func(w http.ResponseWriter, r *http.Request) { w.Write(buf.Bytes()) }
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Write(buf.Bytes())
+	}
 }
 
 var errPageTmpl = template.Must(template.ParseFS(uiFS, append(layoutTmpls, "ui/_error.gohtml")...))
@@ -116,7 +119,6 @@ func respondErrorPage(w http.ResponseWriter, status int, message string) {
 		"ErrorMessage": message,
 	})
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -149,3 +151,12 @@ func newRecoveryMiddleware(config *Config, emailer Emailer) func(http.Handler) h
 		})
 	}
 }
+
+// func redirectToFrenchContentIfNeeded() func(http.Handler)http.Handler {
+// 	return func(h http.Handler) http.Handler {
+// 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+// 			r.Header.Get()
+// 			h.ServeHTTP(w, r)
+// 		})
+// 	}
+// }

@@ -7,10 +7,10 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<link rel="icon" href="/favicon.ico" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>{{ block "page_title" . }}{{ end }} - Julien Sellier</title>
-	<meta name="description" content='{{ block "meta_description" . }}Personal website of Julien Sellier{{ end }}'>
+	<title>{{ block "page_title" . }}{{ end }} - {{ .Branding.Name }}</title>
+	<meta name="description" content='{{ block "meta_description" . }}Website of {{ .Branding.Name }}{{ end }}'>
 	<meta name="robots" content='{{ block "meta_robots" . }}index, follow{{ end }}' />
-	<meta name="author" content="Julien Sellier" />
+	<meta name="author" content="{{ .Branding.Name }}" />
 	{{ template "global_inline_css" . }}
 </head>
 

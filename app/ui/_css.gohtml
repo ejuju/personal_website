@@ -1,5 +1,18 @@
 {{ define "global_inline_css" }}
 <style>
+	@font-face {
+		font-family: "JetBrainsMono";
+		src: url("/JetBrainsMono-Regular.ttf");
+		font-display: fallback;
+	}
+
+	@font-face {
+		font-family: "JetBrainsMono";
+		src: url("/JetBrainsMono-Bold.ttf");
+		font-weight: bold;
+		font-display: fallback;
+	}
+
 	:root {
 		--clr-green: #80ff80;
 		--clr-purple: #7c00b6;
@@ -12,6 +25,7 @@
 		--space-page-side: 1rem;
 		--space-page-bottom: 3rem;
 		--space-page: var(--space-page-top) var(--space-page-side) var(--space-page-bottom);
+		--br: 2px;
 	}
 
 	html {
@@ -22,8 +36,8 @@
 		/* Prevent adjustments of font size after orientation changes in iOS. */
 		-webkit-text-size-adjust: 100%;
 
-		font-family: monospace;
-		font-size: 100%;
+		font-family: "JetBrainsMono", monospace;
+		font-size: 85%;
 		color: var(--clr-txt);
 	}
 
@@ -43,10 +57,10 @@
 		line-height: 1;
 	}
 
-	@media (min-width: 600px) {
+	@media (min-width: 700px) {
 		body {
 			margin: 1rem auto;
-			max-width: 500px;
+			max-width: 525px;
 			border: 1px solid var(--clr-bg-1);
 		}
 	}
@@ -118,6 +132,7 @@
 
 		padding: 1rem;
 		border: 1px solid currentColor;
+		border-radius: calc(var(--br) * 2);
 		text-decoration: underline;
 		text-align: center;
 	}
@@ -172,6 +187,7 @@
 	.tile {
 		padding: 2rem 1rem;
 		background-color: var(--clr-bg-1);
+		border-radius: var(--br);
 	}
 
 	.long_url {
