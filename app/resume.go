@@ -15,7 +15,9 @@ import (
 // Resume data
 
 type resume struct {
-	TagLine map[lang]string
+	Name     string
+	TagLine  map[lang]string
+	PDFTitle string
 	// Experiences
 	ExperiencesTitle          map[lang]string
 	Experiences               []experience
@@ -80,10 +82,12 @@ type contactLink struct {
 }
 
 var resumeData = resume{
+	Name: "Julien Sellier",
 	TagLine: map[lang]string{
 		english: "Passionate self-taught software engineer,\nspecialised in backend and frontend web development.",
 		french:  "Développeur auto-ditacte passionné,\nspecialisé en développement web (backend et frontend).",
 	},
+	PDFTitle:                  "My resume",
 	ExperiencesTitle:          map[lang]string{english: "Work experience", french: "Expériences"},
 	ExperienceDurationKey:     map[lang]string{english: "Duration", french: "Durée"},
 	ExperienceCompanyKey:      map[lang]string{english: "Organisation", french: "Organisation"},
@@ -247,6 +251,12 @@ var (
 
 func generateResumePDF(w io.Writer, content resume, l lang) error {
 	pdf := fpdf.New("P", "pt", "A4", "")
+
+	// Set metadata
+	pdf.SetCreationDate(time.Now())
+	pdf.SetAuthor(content.Name, true)
+	pdf.SetLang(string(l))
+	pdf.SetTitle(content.PDFTitle, true)
 
 	// Setup font
 	font := "Roboto"
