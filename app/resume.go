@@ -244,9 +244,7 @@ func generateAndServeResumeFile(content resume, l lang) http.HandlerFunc {
 	if err != nil {
 		panic(err)
 	}
-	return func(w http.ResponseWriter, r *http.Request) {
-		w.Write(buf.Bytes())
-	}
+	return func(w http.ResponseWriter, r *http.Request) { w.Write(buf.Bytes()) }
 }
 
 // PDF generation
