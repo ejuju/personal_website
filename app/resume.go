@@ -108,7 +108,7 @@ var resumeData = resume{
 			To:       time.Time{},
 			Description: map[lang]string{
 				english: "Taught web development fundamentals with various social programs for (ex-) prisoners and youth at risk.",
-				french:  "J'ai pu initié et formé des (ex-) détenus et des jeunes en difficulté au fondamentaux du développement web.",
+				french:  "Initiation et formation au fondamentaux du développement web auprès de (ex-) détenus et de jeunes en difficulté.",
 			},
 			SkillsAndTools: []string{"HTML", "CSS", "JavaScript", "HTTP"},
 		},
@@ -123,7 +123,7 @@ var resumeData = resume{
 			To:       mustParseTime("October 2022"),
 			Description: map[lang]string{
 				english: "Contributed to the development of a new live video streaming solution based on DASH and HLS.",
-				french:  "J'ai contribué au développement d'une nouvelle solution de live streaming de vidéo basé sur DASH et HLS.",
+				french:  "Développement d'une nouvelle solution de live streaming de vidéo basé sur DASH et HLS.",
 			},
 			SkillsAndTools: []string{"Golang", "Docker", "Kubernetes", "PostgreSQL", "Bash", "Gitlab CI", "AWS"},
 		},
@@ -138,7 +138,7 @@ var resumeData = resume{
 			To:       mustParseTime("January 2022"),
 			Description: map[lang]string{
 				english: "Handled frontend and backend web development projects.",
-				french:  "J'ai géré les projets de développement front et back de plusieurs PMEs",
+				french:  "Développement front et back pour plusieurs PMEs",
 			},
 			SkillsAndTools: []string{"Golang", "TypeScript", "Svelte / Vue / React", "HTML", "CSS", "HTTP", "GCP"},
 		},
@@ -153,7 +153,7 @@ var resumeData = resume{
 			To:       mustParseTime("April 2020"),
 			Description: map[lang]string{
 				english: "Managed the expansion and operation of our web application in 5 new European countries.",
-				french:  "Je me suis occupé de l'expansion et la gestion de notre application web dans 5 nouveaux pays européens.",
+				french:  "Gestion du projet d'expansion et des opérations de notre application web dans 5 nouveaux pays européens.",
 			},
 			SkillsAndTools: []string{"Ruby on Rails", "GCP"},
 		},
