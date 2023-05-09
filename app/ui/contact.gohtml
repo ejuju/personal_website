@@ -7,7 +7,7 @@
 			<span>☎️</span>
 			Contact
 		</h1>
-		<a href="mailto:contact@juliensellier.com">contact@juliensellier.com</a>
+		<a href="mailto:{{ .Branding.ContactEmailAddr }}">{{ .Branding.ContactEmailAddr }}</a>
 	</section>
 
 	<form action="/contact_form" method="post" class="tile" id="form">

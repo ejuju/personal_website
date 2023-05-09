@@ -1,11 +1,13 @@
 package app
 
 type branding struct {
-	Name string
-	Font string
+	Name             string
+	ContactEmailAddr string
+	Font             string
 }
 
 var defaultBranding = branding{
-	Name: "Julien Sellier",
-	Font: "JetBrainsMono",
+	Name:             "Julien Sellier",
+	ContactEmailAddr: "admin@juliensellier.com",
+	Font:             "JetBrainsMono",
 }
