@@ -20,9 +20,9 @@ Reliability and observability:
 - [ ] Rate limiting middleware
 - [ ] Timeout middleware
 - [ ] Record request and response body sizes for report
-- [ ] Record response status for report
-- [ ] Show 404s in report
-- [ ] Improve health report email (HTML template)
+- [ ] Record response status for traffic report
+- [ ] Show 404s in traffic report
+- [ ] Improve health report email (HTML template, sort requests URLs)
 
 Legal:
 - [ ] Complete website info page
