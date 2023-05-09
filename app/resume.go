@@ -61,7 +61,7 @@ type experience struct {
 func (exp *experience) Months() int { return int(exp.To.Sub(exp.From).Hours() / (24 * 30)) }
 
 type skill struct {
-	Title string
+	Title map[lang]string
 	Tools []string
 }
 
@@ -160,11 +160,26 @@ var resumeData = resume{
 	},
 	SkillsTitle: map[lang]string{english: "Skills", french: "Compétences"},
 	Skills: []skill{
-		{Title: "Programming languages", Tools: []string{"Golang", "JavaScript / Typescript"}},
-		{Title: "Website development", Tools: []string{"HTTP", "HTML", "CSS", "JS", "Svelte / Vue /React", "A11y"}},
-		{Title: "DevOps & CI/CD", Tools: []string{"Linux", "Bash", "Ansible", "Gitlab CI / Github Actions", "Docker / Podman", "Kubernetes"}},
-		{Title: "Database", Tools: []string{"PostgreSQL", "MongoDB", "SQLite", "BoltDB"}},
-		{Title: "SE Practices", Tools: []string{"TDD / BDD", "Clean architecture", "Pair / mob programming"}},
+		{
+			Title: map[lang]string{english: "Programming languages", french: "Langages de programmation"},
+			Tools: []string{"Golang", "JavaScript / Typescript"},
+		},
+		{
+			Title: map[lang]string{english: "Website development", french: "Développement de site web"},
+			Tools: []string{"HTTP", "HTML", "CSS", "JS", "Svelte / Vue /React", "A11y"},
+		},
+		{
+			Title: map[lang]string{english: "DevOps & CI/CD", french: "DevOps & CI/CD"},
+			Tools: []string{"Linux", "Bash", "Ansible", "Gitlab CI / Github Actions", "Docker / Podman", "Kubernetes"},
+		},
+		{
+			Title: map[lang]string{english: "Database", french: "Bases de données"},
+			Tools: []string{"PostgreSQL", "MongoDB", "SQLite", "BoltDB"},
+		},
+		{
+			Title: map[lang]string{english: "SE Practices", french: "Pratiques de développement logiciel"},
+			Tools: []string{"TDD / BDD", "Clean architecture", "Pair / mob programming"},
+		},
 	},
 	LanguagesTitle: map[lang]string{english: "Languages", french: "Langues"},
 	Languages: []language{
@@ -348,11 +363,11 @@ func generateResumePDF(w io.Writer, content resume, l lang) error {
 	// Add skills
 	addSection(pdf, content.SkillsTitle[l], func() {
 		for _, skill := range content.Skills {
-			pdf.Bookmark(skill.Title, 2, -1)
+			pdf.Bookmark(skill.Title[l], 2, -1)
 
 			setTempFontStyle(pdf, "B", func() {
 				pdf.Ln(1 * normalFontSize)
-				pdf.MultiCell(0, normalFontSize+4, skill.Title, "", "", false)
+				pdf.MultiCell(0, normalFontSize+4, skill.Title[l], "", "", false)
 			})
 
 			setTempTextColor(pdf, textDimColor, func() {
