@@ -166,7 +166,7 @@ var resumeData = resume{
 		},
 		{
 			Title: map[lang]string{english: "Website development", french: "Développement de site web"},
-			Tools: []string{"HTTP", "HTML", "CSS", "JS", "Svelte / Vue /React", "A11y"},
+			Tools: []string{"HTTP", "HTML", "CSS", "JS", "Svelte / Vue / React", "A11y"},
 		},
 		{
 			Title: map[lang]string{english: "DevOps & CI/CD", french: "DevOps & CI/CD"},
@@ -231,8 +231,8 @@ var resumeData = resume{
 		},
 	},
 	SourceCodeText: map[lang]string{
-		english: "The code I wrote handle my website and to generate this resume as a PDF is available on my GitHub: ",
-		french:  "Le code que j'utilise sur mon site web et pour génerer ce PDF est disponible sur mon GitHub: ",
+		english: "The code used to generate this resume as a PDF is available on my GitHub: ",
+		french:  "Le code utilisé pour génerer ce PDF est disponible sur mon GitHub: ",
 	},
 	SourceCodeURL: "https://github.com/ejuju/personal_website",
 	GeneratedAt:   map[lang]string{english: "PDF generated on ", french: "PDF généré le "},

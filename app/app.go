@@ -151,12 +151,3 @@ func newRecoveryMiddleware(config *Config, emailer Emailer) func(http.Handler) h
 		})
 	}
 }
-
-// func redirectToFrenchContentIfNeeded() func(http.Handler)http.Handler {
-// 	return func(h http.Handler) http.Handler {
-// 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-// 			r.Header.Get()
-// 			h.ServeHTTP(w, r)
-// 		})
-// 	}
-// }
