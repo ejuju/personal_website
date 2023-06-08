@@ -80,18 +80,22 @@ func newRequestTrackingMiddleware(db DB) func(http.Handler) http.Handler {
 			next.ServeHTTP(w, r) // serve request
 			after := time.Now()
 
+			visitorHash, err := newVisitorHash(r)
+			if err != nil {
+				panic(err)
+			}
+
 			// Store request in DB
 			req := &httpRequest{
 				ID:            newID(32),
 				CreatedAt:     time.Now(),
-				VisitorHash:   newVisitorHash(r),
+				VisitorHash:   visitorHash,
 				URL:           r.URL.String(),
-				IPAddress:     net.ParseIP(r.RemoteAddr).String(),
 				ContentLength: r.ContentLength,
 				TimeToHandle:  after.Sub(before),
 				UserAgent:     r.UserAgent(),
 			}
-			err := db.StoreHTTPRequest(req)
+			err = db.StoreHTTPRequest(req)
 			if err != nil {
 				log.Println(err)
 				return
@@ -100,20 +104,32 @@ func newRequestTrackingMiddleware(db DB) func(http.Handler) http.Handler {
 	}
 }
 
-func newVisitorHash(r *http.Request) string {
-	// get true IP
-	ipAddr := r.Header.Get("X-Forwarded-For")
-	if ipAddr == "" {
-		ipAddr = net.ParseIP(r.RemoteAddr).String()
+func getIPAddr(r *http.Request) (string, error) {
+	// Check for reverse proxy header
+	remoteAddr := r.Header.Get("X-Forwarded-For")
+	if remoteAddr == "" {
+		remoteAddr = r.RemoteAddr
 	}
+	addr, err := net.ResolveTCPAddr("tcp", remoteAddr)
+	if err != nil {
+		return "", err
+	}
+	return addr.IP.String(), nil
+}
+
+func newVisitorHash(r *http.Request) (string, error) {
 	// Hash IP addr and user-agent
 	hash := sha1.New()
-	_, err := hash.Write([]byte(ipAddr + r.UserAgent()))
+	ip, err := getIPAddr(r)
+	if err != nil {
+		return "", err
+	}
+	_, err = hash.Write([]byte(ip + r.UserAgent()))
 	if err != nil {
 		panic(err)
 	}
 	// Return base32 hex encoded hash
-	return base32.HexEncoding.EncodeToString(hash.Sum(nil))
+	return base32.HexEncoding.EncodeToString(hash.Sum(nil)), nil
 }
 
 func doPeriodicHealthReport(config *Config, emailer Emailer, db DB) {
