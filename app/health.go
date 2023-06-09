@@ -5,7 +5,6 @@ import (
 	"encoding/base32"
 	"fmt"
 	"log"
-	"net"
 	"net/http"
 	"strconv"
 	"time"
@@ -110,11 +109,7 @@ func getIPAddr(r *http.Request) (string, error) {
 	if remoteAddr == "" {
 		remoteAddr = r.RemoteAddr
 	}
-	addr, err := net.ResolveTCPAddr("tcp", remoteAddr)
-	if err != nil {
-		return "", err
-	}
-	return addr.IP.String(), nil
+	return remoteAddr, nil
 }
 
 func newVisitorHash(r *http.Request) (string, error) {
