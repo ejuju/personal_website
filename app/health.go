@@ -40,7 +40,6 @@ type httpRequest struct {
 	URL           string
 	VisitorHash   string
 	UserAgent     string
-	IPAddress     string
 	ContentLength int64
 	TimeToHandle  time.Duration
 }
