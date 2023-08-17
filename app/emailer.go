@@ -46,7 +46,7 @@ func newSMTPEmailer(config *Config) Emailer {
 	auth := smtp.PlainAuth("", config.SMTPUsername, config.SMTPPassword, config.SMTPHost)
 	return func(email *Email) error {
 		addr := config.SMTPHost + ":" + strconv.Itoa(config.SMTPPort)
-		return smtp.SendMail(addr, auth, config.SMTPUsername, email.To, []byte(emailMessageStr(email)))
+		return smtp.SendMail(addr, auth, config.SMTPSender, email.To, []byte(emailMessageStr(email)))
 	}
 }
 
