@@ -130,7 +130,7 @@ func doPeriodicHealthReport(config *Config, emailer Emailer, db DB) {
 	// Generate and send report on startup
 	report, err := generateReport(db, time.Now().Add(-24*time.Hour), time.Now())
 	if err != nil {
-		log.Println(err)
+		panic(err)
 	}
 	err = sendEmailToAdmin(config, emailer, "New startup report for juliensellier.com", report.String())
 	if err != nil {
