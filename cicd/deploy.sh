@@ -14,9 +14,9 @@ chmod 0600 ssh_key
 
 # Deploy to production server (replace binary and restart service)
 OPTS="-i ssh_key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-ssh "$OPTS" "$USERNAME"@"$HOST" "sudo systemctl stop website.service"
-scp "$OPTS" main "$USERNAME"@"$HOST":/usr/local/bin
-ssh "$OPTS" "$USERNAME"@"$HOST" "sudo systemctl start website.service"
+ssh $OPTS "$USERNAME"@"$HOST" "sudo systemctl stop website.service"
+scp $OPTS main "$USERNAME"@"$HOST":/usr/local/bin/website
+ssh $OPTS "$USERNAME"@"$HOST" "sudo systemctl start website.service"
 
 # Cleanup (remove created files)
 rm -f ssh_key
