@@ -145,10 +145,6 @@ func doPeriodicHealthReport(config *Config, emailer Emailer, db DB) {
 		switch {
 		default:
 			continue
-		case t.Hour() == 0 && t.Minute() == 0:
-			// daily report every day at midnight
-			subjectPrefix = "Last 24 hours"
-			from = t.Add(-24 * time.Hour)
 		case t.Hour() == 7 && t.Minute() == 0 && t.Weekday() == time.Monday:
 			// weekly report every monday at 7 AM
 			subjectPrefix = "Last week"
