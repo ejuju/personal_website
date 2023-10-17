@@ -105,7 +105,7 @@ var resumeData = resume{
 			Company:  "Orange, Prison de Melun, Mission Locale, Code Phenix, L'Ilot",
 			Location: "Paris, France",
 			From:     mustParseTime("January 2023"),
-			To:       time.Time{},
+			To:       mustParseTime("August 2023"),
 			Description: map[lang]string{
 				english: "Taught web development fundamentals with various social programs for (ex-) prisoners and youth at risk.",
 				french:  "Initiation et formation au fondamentaux du développement web auprès de (ex-) détenus et de jeunes en difficulté.",
