@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -e
+set -ev
 
 # Run Go checks and build executable
 go mod tidy
