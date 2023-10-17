@@ -41,7 +41,7 @@ func NewHTTPHandler(devMode bool) http.Handler {
 	db := newBoltDB()
 
 	// Start analytics reporting background job (only for prod)
-	if !devMode {
+	if devMode {
 		go doPeriodicHealthReport(config, emailer, db)
 	}
 
@@ -53,12 +53,10 @@ func NewHTTPHandler(devMode bool) http.Handler {
 	// Init HTTP router
 	router := pat.New()
 
-	// Serve pages and forms
+	// Register routes
 	router.Add(http.MethodGet, "/", prerenderAndServePage("home.gohtml", english, nil))
 	router.Add(http.MethodGet, "/info", prerenderAndServePage("info.gohtml", english, nil))
 	router.Add(http.MethodGet, "/contact", prerenderAndServePage("contact.gohtml", english, nil))
-	router.Add(http.MethodGet, "/contact_success", prerenderAndServePage("contact_success.gohtml", english, nil))
-	router.Add(http.MethodPost, "/contact_form", handleContactForm(config, db, emailer))
 	router.Add(http.MethodGet, "/resume", prerenderAndServePage("resume.gohtml", english, resumeData))
 	router.Add(http.MethodGet, "/resume/fr", prerenderAndServePage("resume.gohtml", french, resumeData))
 	router.Add(http.MethodGet, "/resume.pdf", generateAndServeResumeFile(resumeData, english))

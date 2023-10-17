@@ -1,7 +1,6 @@
 # To do
 
 UX improvements:
-- [ ] Improve contact confirmation email (using HTML: pinpointe.com/blog/email-campaign-html-and-css-support/)
 - [ ] Style customizer (dark/light mode, accent colors, border-radius)
 - [ ] Service worker for offline access
 - [ ] Add french translation for website pages (CV is already done)
@@ -9,7 +8,6 @@ UX improvements:
 DX improvements:
 - [ ] Try github.com/signintech/gopdf instead of current PDF library.
 - [ ] Dynamically generate sitemap
-- [ ] Put all user-facing text content in a Go struct
 - [ ] Auto-edit LinkedIn profile (learn.microsoft.com/en-us/linkedin/shared/integrations/people/profile-api)
 
 CICD:

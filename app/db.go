@@ -11,8 +11,6 @@ import (
 )
 
 type DB interface {
-	StoreContactFormSubmission(*ContactFormSubmission) error
-
 	StoreHTTPRequest(*httpRequest) error
 	CountHTTPRequests(from, to time.Time) (int, error)
 	GetAverageTimeToHandleHTTPRequest(from, to time.Time) (time.Duration, error)
@@ -26,7 +24,6 @@ type boltDB struct {
 }
 
 var (
-	boltContactFormBucket  = []byte("contact_form_submissions")
 	boltHTTPRequestsBucket = []byte("http_requests")
 )
 
@@ -44,7 +41,6 @@ func newBoltDB() *boltDB {
 	// Ensure buckets are created
 	err = db.Update(func(tx *bbolt.Tx) error {
 		for _, bucketID := range [][]byte{
-			boltContactFormBucket,
 			boltHTTPRequestsBucket,
 		} {
 			_, err := tx.CreateBucketIfNotExists(bucketID)
@@ -62,13 +58,6 @@ func newBoltDB() *boltDB {
 }
 
 func (db *boltDB) close() error { return db.f.Close() }
-
-func (db *boltDB) StoreContactFormSubmission(s *ContactFormSubmission) error {
-	return db.f.Update(func(tx *bbolt.Tx) error {
-		key := []byte(s.CreatedAt.Format(time.RFC3339) + s.ID)
-		return tx.Bucket(boltContactFormBucket).Put(key, mustMarshalJSON(s))
-	})
-}
 
 func (db *boltDB) StoreHTTPRequest(req *httpRequest) error {
 	return db.f.Update(func(tx *bbolt.Tx) error {

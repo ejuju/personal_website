@@ -1,8 +1,4 @@
 # Personal website
-# My personal website
-
-Online CV and contact form.
-
 ### Stack
 
 Stack was kept as simple as possible.

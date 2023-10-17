@@ -225,10 +225,6 @@ var resumeData = resume{
 			Label: map[lang]string{english: "Email address", french: "Adresse email"},
 			URL:   "mailto:admin@juliensellier.com",
 		},
-		{
-			Label: map[lang]string{english: "Online contact form", french: "Formulaire de contact en ligne"},
-			URL:   "https://juliensellier.com/contact#form",
-		},
 	},
 	SourceCodeText: map[lang]string{
 		english: "The code used to generate this resume as a PDF is available on my GitHub: ",
