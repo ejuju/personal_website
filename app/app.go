@@ -40,15 +40,11 @@ func NewHTTPHandler(devMode bool) http.Handler {
 	// Init DB
 	db := newBoltDB()
 
-	// Start analytics reporting background job (only for prod)
-	if devMode {
-		go doPeriodicHealthReport(config, emailer, db)
-	}
+	// Start analytics reporting background job
+	go doPeriodicHealthReport(config, emailer, db)
 
-	// Start DB backup background job (only for prod)
-	if !devMode {
-		go db.doPeriodicDBFileBackup(config, emailer)
-	}
+	// Start DB backup background job
+	go db.doPeriodicDBFileBackup(config, emailer)
 
 	// Init HTTP router
 	router := pat.New()

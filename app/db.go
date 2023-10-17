@@ -127,11 +127,6 @@ func (db *boltDB) readTimeRange(bucket []byte, from, to time.Time, cb func(k, v 
 
 // periodic boltdb database file backup to an another file on disk.
 func (db *boltDB) doPeriodicDBFileBackup(config *Config, emailer Emailer) {
-	if err := db.backupDB(db.newBackupFname(time.Now())); err != nil {
-		if sendEmailToAdmin(config, emailer, "DB backup failed", err.Error()) != nil {
-			log.Println(err)
-		}
-	}
 	ticker := time.NewTicker(24 * time.Hour)
 	for tick := range ticker.C {
 		if err := db.backupDB(db.newBackupFname(tick)); err != nil {

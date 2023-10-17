@@ -107,7 +107,7 @@ var resumeData = resume{
 			From:     mustParseTime("January 2023"),
 			To:       mustParseTime("August 2023"),
 			Description: map[lang]string{
-				english: "Taught web development fundamentals with various social programs for (ex-) prisoners and youth at risk.",
+				english: "Taught web development fundamentals with various social programs for (former-) inmates and youth at risk.",
 				french:  "Initiation et formation au fondamentaux du développement web auprès de (ex-) détenus et de jeunes en difficulté.",
 			},
 			SkillsAndTools: []string{"HTML", "CSS", "JavaScript", "HTTP"},
