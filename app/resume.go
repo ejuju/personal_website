@@ -99,6 +99,21 @@ var resumeData = resume{
 	Experiences: []experience{
 		{
 			Title: map[lang]string{
+				english: "Devops engineer",
+				french:  "Ingénieur Devops",
+			},
+			Company:  "Scaleway",
+			Location: "Paris, France",
+			From:     mustParseTime("September 2023"),
+			To:       time.Time{},
+			Description: map[lang]string{
+				english: "Working on developing and maintaining the DNS, domains and transactional email products.",
+				french:  "Développement et maintenance des produits DNS, nom de domaines et email transactionnel.",
+			},
+			SkillsAndTools: []string{"DNS", "SMTP", "Go", "gRPC", "Docker", "PostgreSQL"},
+		},
+		{
+			Title: map[lang]string{
 				english: "Web development tutor",
 				french:  "Formateur en développement web",
 			},
@@ -324,7 +339,7 @@ func generateResumePDF(w io.Writer, content resume, l lang) error {
 	addSection(pdf, content.ExperiencesTitle[l], func() {
 		for _, exp := range content.Experiences {
 			pdf.Bookmark(fmt.Sprintf("%s (%s)", exp.Title[l], exp.Company), 2, -1)
-			pdf.Ln(2.5 * normalFontSize)
+			pdf.Ln(3.5 * normalFontSize)
 
 			setTempFontStyle(pdf, "B", func() {
 				pdf.MultiCell(0, normalFontSize+4, exp.Title[l], "", "", false)
