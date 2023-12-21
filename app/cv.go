@@ -110,7 +110,7 @@ var resumeData = resume{
 				english: "Working on developing and maintaining the DNS, domains and transactional email products.",
 				french:  "Développement et maintenance des produits DNS, nom de domaines et email transactionnel.",
 			},
-			SkillsAndTools: []string{"DNS", "SMTP", "Go", "gRPC", "Docker", "PostgreSQL"},
+			SkillsAndTools: []string{"DNS", "SMTP", "Go"},
 		},
 		{
 			Title: map[lang]string{
@@ -125,7 +125,7 @@ var resumeData = resume{
 				english: "Taught web development fundamentals with various social programs for (former-) inmates and youth at risk.",
 				french:  "Initiation et formation au fondamentaux du développement web auprès de (ex-) détenus et de jeunes en difficulté.",
 			},
-			SkillsAndTools: []string{"HTML", "CSS", "JavaScript", "HTTP"},
+			SkillsAndTools: []string{"HTTP", "HTML", "CSS", "JavaScript"},
 		},
 		{
 			Title: map[lang]string{
@@ -140,7 +140,7 @@ var resumeData = resume{
 				english: "Contributed to the development of a new live video streaming solution based on DASH and HLS.",
 				french:  "Développement d'une nouvelle solution de live streaming de vidéo basé sur DASH et HLS.",
 			},
-			SkillsAndTools: []string{"Golang", "Docker", "Kubernetes", "PostgreSQL", "Bash", "Gitlab CI", "AWS"},
+			SkillsAndTools: []string{"Golang", "Docker", "Kubernetes", "PostgreSQL"},
 		},
 		{
 			Title: map[lang]string{
@@ -155,7 +155,7 @@ var resumeData = resume{
 				english: "Handled frontend and backend web development projects.",
 				french:  "Développement front et back pour plusieurs PMEs",
 			},
-			SkillsAndTools: []string{"Golang", "TypeScript", "Svelte / Vue / React", "HTML", "CSS", "HTTP", "GCP"},
+			SkillsAndTools: []string{"Golang", "TypeScript", "Svelte / Vue / React"},
 		},
 		{
 			Title: map[lang]string{
@@ -266,7 +266,7 @@ var (
 	titleFontSize  = 24.0
 	bigFontSize    = 16.0
 	normalFontSize = 9.5
-	marginTopSize  = 80.0
+	marginTopSize  = 50.0
 	marginSideSize = 50.0 // left and right margins
 	textColor      = [3]int{0, 0, 0}
 	textDimColor   = [3]int{50, 50, 50}
@@ -339,7 +339,7 @@ func generateResumePDF(w io.Writer, content resume, l lang) error {
 	addSection(pdf, content.ExperiencesTitle[l], func() {
 		for _, exp := range content.Experiences {
 			pdf.Bookmark(fmt.Sprintf("%s (%s)", exp.Title[l], exp.Company), 2, -1)
-			pdf.Ln(3.5 * normalFontSize)
+			pdf.Ln(2 * normalFontSize)
 
 			setTempFontStyle(pdf, "B", func() {
 				pdf.MultiCell(0, normalFontSize+4, exp.Title[l], "", "", false)

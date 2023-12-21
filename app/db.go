@@ -31,7 +31,7 @@ func newBoltDB() *boltDB {
 	// Open file
 	dbDirPath := os.Getenv("DB_DIR_PATH")
 	if dbDirPath == "" {
-		dbDirPath = ".tmp/"
+		dbDirPath = os.TempDir()
 	}
 	db, err := bbolt.Open(dbDirPath+"main.boltdb", 0666, &bbolt.Options{Timeout: time.Second})
 	if err != nil {
