@@ -339,7 +339,7 @@ func generateResumePDF(w io.Writer, content resume, l lang) error {
 	addSection(pdf, content.ExperiencesTitle[l], func() {
 		for _, exp := range content.Experiences {
 			pdf.Bookmark(fmt.Sprintf("%s (%s)", exp.Title[l], exp.Company), 2, -1)
-			pdf.Ln(3.5 * normalFontSize)
+			pdf.Ln(1.5 * normalFontSize)
 
 			setTempFontStyle(pdf, "B", func() {
 				pdf.MultiCell(0, normalFontSize+4, exp.Title[l], "", "", false)
