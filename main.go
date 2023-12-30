@@ -1,26 +1,25 @@
 package main
 
 import (
-	"log"
-	"net/http"
 	"os"
-	"time"
+	"os/signal"
+	"syscall"
 
-	"github.com/ejuju/personal_website/app"
+	"github.com/ejuju/my-website/internal/service"
 )
 
 func main() {
-	// Init and run HTTP server
-	server := &http.Server{
-		Handler:        app.NewHTTPHandler(os.Getenv("MODE") != "PROD"),
-		Addr:           ":8080",
-		ReadTimeout:    time.Second,
-		WriteTimeout:   time.Second,
-		IdleTimeout:    time.Second,
-		MaxHeaderBytes: 8000,
+	service, err := service.New()
+	if err != nil {
+		panic(err)
 	}
-	log.Println("starting HTTP server at address", server.Addr)
-	err := server.ListenAndServe()
+	go service.Run()
+
+	// Wait for termination.
+	sigterm := make(chan os.Signal, 1)
+	signal.Notify(sigterm, syscall.SIGTERM, syscall.SIGINT)
+	<-sigterm
+	err = service.Shutdown()
 	if err != nil {
 		panic(err)
 	}

@@ -1,3 +1,4 @@
-/.tmp
-/.vscode
-/config.json
+.vscode
+config.json
+*.log
+temp
