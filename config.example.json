@@ -1,4 +1,6 @@
 {
 	"env": "dev",
-	"log": "app.log"
+	"log": "app.log",
+	"http-port": 8080,
+	"ctcp-port": 8081
 }

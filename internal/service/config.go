@@ -7,8 +7,10 @@ import (
 )
 
 type Config struct {
-	Env string `json:"env"`
-	Log string `json:"log"`
+	Env      string `json:"env"`
+	Log      string `json:"log"`
+	HTTPPort int    `json:"http-port"`
+	CTCPPort int    `json:"ctcp-port"`
 }
 
 func LoadConfig(fpath string) (c Config, err error) {

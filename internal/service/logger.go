@@ -31,7 +31,7 @@ func NewLogger(fpath string) (l Logger, err error) {
 }
 
 func (l Logger) Log(s string) {
-	_, err := io.WriteString(l.Writer, s)
+	_, err := io.WriteString(l.Writer, s+"\n")
 	if err != nil {
 		panic(err)
 	}
