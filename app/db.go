@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"path/filepath"
 	"time"
 
 	"go.etcd.io/bbolt"
@@ -33,7 +34,7 @@ func newBoltDB() *boltDB {
 	if dbDirPath == "" {
 		dbDirPath = os.TempDir()
 	}
-	db, err := bbolt.Open(dbDirPath+"main.boltdb", 0666, &bbolt.Options{Timeout: time.Second})
+	db, err := bbolt.Open(filepath.Join(dbDirPath, "main.boltdb"), 0666, &bbolt.Options{Timeout: time.Second})
 	if err != nil {
 		panic(err)
 	}
