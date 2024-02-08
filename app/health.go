@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"sort"
 	"strconv"
 	"time"
 )
@@ -28,8 +29,17 @@ func (r *report) String() string {
 	out += fmt.Sprintf("%-25s %s\n", "Number of requests:", strconv.Itoa(r.NumRequests))
 	out += fmt.Sprintf("%-25s %s\n", "Avg. time to handle:", r.AverageTimeToHandle)
 	out += "Most requested URLs:\n"
-	for url, numRequests := range r.NumRequestPerURL {
-		out += fmt.Sprintf("\t* %-10s %q\n", strconv.Itoa(numRequests), url)
+	type urlStat struct {
+		url      string
+		requests int
+	}
+	urlStats := make([]urlStat, 0, len(r.NumRequestPerURL))
+	for url, requests := range r.NumRequestPerURL {
+		urlStats = append(urlStats, urlStat{url, requests})
+	}
+	sort.Slice(urlStats, func(i, j int) bool { return urlStats[i].requests > urlStats[j].requests })
+	for _, stat := range urlStats {
+		out += fmt.Sprintf("\t* %-10s %q\n", strconv.Itoa(stat.requests), stat.url)
 	}
 	return out
 }
